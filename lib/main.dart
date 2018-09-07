@@ -1,3 +1,5 @@
+import 'package:cinematic_flutter/model/app_load_state.dart';
+import 'package:cinematic_flutter/model/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -9,6 +11,7 @@ import 'package:cinematic_flutter/middleware/store_app_middleware.dart';
 import 'package:cinematic_flutter/localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:logging/logging.dart';
+import 'package:cinematic_flutter/viewmodel/main_view_model.dart';
 
 void main() {
   Logger.root.level = Level.ALL;
@@ -19,6 +22,7 @@ void main() {
 }
 
 class App extends StatelessWidget {
+  MainViewModel vm;
   final store = Store<AppState>(
     appStateReducer,
     initialState: AppState.init(),
@@ -28,9 +32,9 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) => StoreProvider(
       store: store,
-      child: StoreConnector<AppState, ThemeData>(
-        builder: (ctx, themeData) => MaterialApp(
-              theme: themeData,
+      child: StoreConnector<AppState, MainViewModel>(
+        builder: (ctx, vm) => MaterialApp(
+              theme: vm.currentThemeData,
               supportedLocales: [
                 AppLocalizations.ZH_LOCALE,
                 AppLocalizations.EN_LOCALE,
@@ -40,12 +44,21 @@ class App extends StatelessWidget {
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
               ],
+              initialRoute: Routes.home,
               routes: {
                 Routes.home: (ctx) => HomePage(),
               },
             ),
         converter: (store) {
-          return store.state.currentTheme.themeData;
+          if (vm == null) {
+            vm = MainViewModel(store);
+          } else {
+            vm.setAppState(store);
+          }
+          if (vm.loadSettingState == AppLoadState.notLoaded) {
+            vm.loadSetting();
+          }
+          return vm;
         },
       ));
 }

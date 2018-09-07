@@ -7,7 +7,7 @@ Future<bool> setSharedPreferencesInt(String key, int vlue) async {
   return await prefs.setInt(key, vlue);
 }
 
-Future<int> getSharedPreferencesInt(String key) async {
+Future getSharedPreferencesValue(String key) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   return await prefs.get(key);
 }
@@ -16,3 +16,4 @@ Future<bool> setSharedPreferencesString(String key, String vlue) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   return await prefs.setString(key, vlue);
 }
+

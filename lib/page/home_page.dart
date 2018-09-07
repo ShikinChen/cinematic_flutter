@@ -14,14 +14,16 @@ import 'package:logging/logging.dart';
 class HomePage extends StatelessWidget {
   final int dis = 2;
   final Logger logger = Logger('HomePage');
+  HomeViewModel vm;
 
   @override
   Widget build(BuildContext context) => StoreConnector<AppState, HomeViewModel>(
         distinct: true,
         converter: (store) {
-          logger.fine(
-              '${store.state.currentLocale == null ? 'null' : store.state.currentLocale.languageCode}');
-          return HomeViewModel(store);
+          if (vm == null) {
+            vm = HomeViewModel(store);
+          }
+          return vm;
         },
         builder: buildHome,
       );

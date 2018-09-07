@@ -8,8 +8,6 @@ class HomeViewModel {
 
   HomeViewModel(this.store);
 
-  static HomeViewModel fromStore(Store<AppState> store) => HomeViewModel(store);
-
   loadLocale(Locale locale) {
     store.dispatch(LoadLocaleAction(locale));
   }

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
-final Logger log = new Logger('AppTheme');
+final Logger logger = new Logger('AppTheme');
 
 class AppTheme {
-  static get themes => [ThemeData.dark(), ThemeData.light()];
+  static get themes => [ThemeData.light(), ThemeData.dark()];
 
   int _currentThemeIndex;
 
   ThemeData _themeData;
 
   set currentThemeIndex(int value) {
-    log.fine('_currentThemeIndex:${_currentThemeIndex}');
-    _currentThemeIndex = value;
+    logger.fine('_currentThemeIndex:${_currentThemeIndex}');
+    _currentThemeIndex = value??0;
     _themeData = themes[_currentThemeIndex];
   }
 

@@ -1,3 +1,5 @@
+import 'package:cinematic_flutter/model/app_load_state.dart';
+import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:cinematic_flutter/model/app_state.dart';
 import 'package:cinematic_flutter/actions/actions.dart';
@@ -11,6 +13,7 @@ final Logger logger = Logger('store_app_middleware');
 List<Middleware<AppState>> createStoreAppMiddleware() => [
       TypedMiddleware<AppState, ToggleThemeAction>(_toggleTheme()),
       TypedMiddleware<AppState, LoadLocaleAction>(_loadLocale()),
+      TypedMiddleware<AppState, LoadSettingAction>(_loadSetting()),
     ];
 
 Middleware<AppState> _toggleTheme() =>
@@ -25,11 +28,34 @@ Middleware<AppState> _toggleTheme() =>
 
 Middleware<AppState> _loadLocale() =>
     (Store<AppState> store, action, NextDispatcher next) {
-//      logger.fine('_loadLocale:${action.locale.languageCode}');
-//      logger.fine('store.state.currentLocale:${store.state.currentLocale}');
       if (store.state.currentLocale != action.locale) {
-//        logger.fine('store.state.currentLocale != action.locale');
-        AppLocalizations.load(action.locale);
-        next(action);
+        setSharedPreferencesString(APP_LOCALE_KEY, action.locale.languageCode)
+            .then((b) {
+          if (b) {
+            AppLocalizations.load(action.locale);
+            next(action);
+          }
+        });
       }
+    };
+
+Middleware<AppState> _loadSetting() =>
+    (Store<AppState> store, action, NextDispatcher next) {
+      logger.fine('_loadSetting');
+      getSharedPreferencesValue(APP_THEME_KEY).then((value) {
+        logger.fine('themeIndex:${value}');
+        if (value != null) {
+          action.themeIndex = value;
+        }
+        return getSharedPreferencesValue(APP_LOCALE_KEY);
+      }).then((value) {
+        Locale locale = AppLocalizations.getLocale(value);
+        logger.fine('currentLocale:${value}');
+        if (locale != null) {
+          action.currentLocale = locale;
+          AppLocalizations.load(locale);
+        }
+        action.loadSettingState = AppLoadState.loaded;
+        next(action);
+      });
     };

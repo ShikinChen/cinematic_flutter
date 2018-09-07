@@ -6,8 +6,10 @@ import 'package:cinematic_flutter/l10n/messages_all.dart';
 import 'package:flutter/material.dart';
 
 class AppLocalizations {
-  static const Locale EN_LOCALE = Locale("en", "");
-  static const Locale ZH_LOCALE = Locale("zh", "");
+  static const String EN = 'en';
+  static const String ZH = 'zh';
+  static const Locale EN_LOCALE = Locale(EN, "");
+  static const Locale ZH_LOCALE = Locale(ZH, "");
 
   static Future<AppLocalizations> load(Locale locale) {
     if (locale != null) {
@@ -21,6 +23,21 @@ class AppLocalizations {
       });
     }
     return null;
+  }
+
+  static Locale getLocale(String localeName) {
+    switch (localeName) {
+      case EN:
+        {
+          return EN_LOCALE;
+        }
+      case ZH:
+        {
+          return ZH_LOCALE;
+        }
+      default:
+        return null;
+    }
   }
 
   static AppLocalizations of(BuildContext context) =>
@@ -69,15 +86,16 @@ class AppLocalizations {
       );
 
   String get simplifiedChinese => Intl.message(
-    'Simplified Chinese',
-    name: 'simplifiedChinese',
-    args: [],
-  );
+        'Simplified Chinese',
+        name: 'simplifiedChinese',
+        args: [],
+      );
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   @override
-  bool isSupported(Locale locale) => ['en', 'zh'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      [AppLocalizations.EN, AppLocalizations.ZH].contains(locale.languageCode);
 
   @override
   Future<AppLocalizations> load(Locale locale) => AppLocalizations.load(locale);
