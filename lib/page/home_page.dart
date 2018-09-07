@@ -3,22 +3,30 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:cinematic_flutter/widget/active_tab.dart';
 import 'package:cinematic_flutter/model/app_tab.dart';
 import 'package:cinematic_flutter/widget/media_list.dart';
-import 'package:cinematic_flutter/common/app_localizations.dart';
 import 'package:cinematic_flutter/widget/toggle_theme_button.dart';
 import 'package:cinematic_flutter/model/app_state.dart';
-import 'package:cinematic_flutter/common/localizations_keys.dart';
+import 'package:cinematic_flutter/localizations.dart';
+import 'package:cinematic_flutter/constants.dart';
+import 'package:cinematic_flutter/widget/language_dialog.dart';
+import 'package:cinematic_flutter/viewmodel/home_view_model.dart';
+import 'package:logging/logging.dart';
 
 class HomePage extends StatelessWidget {
   final int dis = 2;
+  final Logger logger = Logger('HomePage');
 
   @override
-  Widget build(BuildContext context) => StoreConnector<AppState, ThemeData>(
+  Widget build(BuildContext context) => StoreConnector<AppState, HomeViewModel>(
         distinct: true,
-        converter: (store) => store.state.currentTheme.themeData,
+        converter: (store) {
+          logger.fine(
+              '${store.state.currentLocale == null ? 'null' : store.state.currentLocale.languageCode}');
+          return HomeViewModel(store);
+        },
         builder: buildHome,
       );
 
-  Widget buildHome(BuildContext ctx, ThemeData themeData) => Scaffold(
+  Widget buildHome(BuildContext ctx, HomeViewModel vm) => Scaffold(
         appBar: AppBar(
           title: Text(AppLocalizations.of(ctx).appTitle),
           actions: <Widget>[
@@ -32,43 +40,52 @@ class HomePage extends StatelessWidget {
             )
           ],
         ),
-        drawer: buildDrawer(ctx),
+        drawer: buildDrawer(ctx, vm),
       );
 
-  Widget buildDrawer(BuildContext ctx) {
+  Widget buildDrawer(BuildContext ctx, HomeViewModel vm) {
     List<_DrawerItem> list = createDrawerItemList(ctx);
     return Drawer(
       child: ListView.builder(
-        itemBuilder: (ctx, index) => buildDrawerItem(ctx, list, index),
+        itemBuilder: (ctx, index) => buildDrawerItem(ctx, vm, list, index),
         itemCount: list.length + 1 + list.length ~/ dis,
       ),
     );
   }
 
-  List<_DrawerItem> createDrawerItemList(BuildContext ctx) => [
-        _DrawerItem(
-          LocalizationsKeys.SEARCH_KEY,
-          Icons.search,
-        ),
-        _DrawerItem(
-          LocalizationsKeys.FAVORITES_KEY,
-          Icons.favorite,
-        ),
-        _DrawerItem(
-          LocalizationsKeys.MOVIES_KEY,
-          Icons.local_movies,
-        ),
-        _DrawerItem(
-          LocalizationsKeys.TV_SHOWS_KEY,
-          Icons.live_tv,
-        ),
-        _DrawerItem(
-          LocalizationsKeys.LANGUAGE_KEY,
-          Icons.language,
-        ),
-      ];
+  List<_DrawerItem> createDrawerItemList(BuildContext ctx) {
+    AppLocalizations localizations = AppLocalizations.of(ctx);
+    return [
+      _DrawerItem(
+        localizations.search,
+        SEARCH_KEY,
+        Icons.search,
+      ),
+      _DrawerItem(
+        localizations.favorites,
+        FAVORITES_KEY,
+        Icons.favorite,
+      ),
+      _DrawerItem(
+        localizations.movies,
+        MOVIES_KEY,
+        Icons.local_movies,
+      ),
+      _DrawerItem(
+        localizations.tvShows,
+        TV_SHOWS_KEY,
+        Icons.live_tv,
+      ),
+      _DrawerItem(
+        localizations.language,
+        LANGUAGE_KEY,
+        Icons.language,
+      ),
+    ];
+  }
 
-  Widget buildDrawerItem(BuildContext ctx, List<_DrawerItem> list, int index) {
+  Widget buildDrawerItem(
+      BuildContext ctx, HomeViewModel vm, List<_DrawerItem> list, int index) {
     if (index == 0) {
       return DrawerHeader(
         padding: EdgeInsets.all(0.0),
@@ -95,42 +112,29 @@ class HomePage extends StatelessWidget {
 //    print('index-2:${index}');
     _DrawerItem item = list[index];
     return ListTile(
-      title: Text(AppLocalizations.of(ctx).text(item.titleKey)),
+      title: Text(item.title),
       trailing: Icon(item.iconData),
       onTap: () {
-        switch (item.titleKey) {
-          case LocalizationsKeys.SEARCH_KEY:
+        switch (item.key) {
+          case SEARCH_KEY:
             {}
             break;
-          case LocalizationsKeys.FAVORITES_KEY:
+          case FAVORITES_KEY:
             {}
             break;
-          case LocalizationsKeys.MOVIES_KEY:
+          case MOVIES_KEY:
             {}
             break;
-          case LocalizationsKeys.TV_SHOWS_KEY:
+          case TV_SHOWS_KEY:
             {}
             break;
-          case LocalizationsKeys.LANGUAGE_KEY:
+          case LANGUAGE_KEY:
             {
               showDialog(
                 context: ctx,
-                builder: (ctx) => SimpleDialog(
-                      title: const Text('Select assignment'),
-                      children: <Widget>[
-                        new SimpleDialogOption(
-                          onPressed: () {
-                            Navigator.pop(ctx);
-                          },
-                          child: const Text('Treasury department'),
-                        ),
-                        new SimpleDialogOption(
-                          onPressed: () {
-                            Navigator.pop(ctx);
-                          },
-                          child: const Text('State department'),
-                        ),
-                      ],
+                builder: (ctx) => LanguageDialog.of(
+                      ctx,
+                      vm,
                     ),
               );
             }
@@ -144,8 +148,9 @@ class HomePage extends StatelessWidget {
 }
 
 class _DrawerItem {
-  String titleKey;
+  String title;
+  String key;
   IconData iconData;
 
-  _DrawerItem(this.titleKey, this.iconData);
+  _DrawerItem(this.title, this.key, this.iconData);
 }

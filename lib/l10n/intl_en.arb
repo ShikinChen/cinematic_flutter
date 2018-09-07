@@ -1,0 +1,43 @@
+{
+  "@@last_modified": "2018-09-07T11:12:09.222283",
+  "appTitle": "Cinematic",
+  "@appTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "search": "Search",
+  "@search": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "favorites": "Favorites",
+  "@favorites": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "movies": "Movies",
+  "@movies": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "tvShows": "TV Shows",
+  "@tvShows": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "language": "Language",
+  "@language": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "english": "English",
+  "@english": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "simplifiedChinese": "Simplified Chinese",
+  "@simplifiedChinese": {
+    "type": "text",
+    "placeholders": {}
+  }
+}

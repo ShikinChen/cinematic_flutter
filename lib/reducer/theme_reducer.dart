@@ -6,6 +6,5 @@ final themeReducer = combineReducers<AppTheme>([
   TypedReducer<AppTheme, ToggleThemeAction>(_toggleThemeReducer),
 ]);
 
-AppTheme _toggleThemeReducer(AppTheme appTheme, ToggleThemeAction) => appTheme
-  ..currentThemeIndex =
-      (appTheme.currentThemeIndex + 1) % AppTheme.themes.length;
+AppTheme _toggleThemeReducer(AppTheme appTheme, toggleThemeAction) =>
+    appTheme..currentThemeIndex = toggleThemeAction.themeIndex;

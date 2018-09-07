@@ -4,3 +4,17 @@ const String API_KEY = '';
 const String IMAGE_URL_LARGE = "https://image.tmdb.org/t/p/w500/";
 
 const String IMAGE_URL_MEDIUM = "https://image.tmdb.org/t/p/w300/";
+
+const String SEARCH_KEY = 'search';
+
+const String FAVORITES_KEY = 'favorites';
+
+const String MOVIES_KEY = 'movies';
+
+const String TV_SHOWS_KEY = 'tv_shows';
+
+const String LANGUAGE_KEY = 'language';
+
+const String APP_THEME_KEY = 'app_theme';
+
+const String APP_LOCALE_KEY = 'app_locale';

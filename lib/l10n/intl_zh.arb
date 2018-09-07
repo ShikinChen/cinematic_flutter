@@ -1,0 +1,43 @@
+{
+  "@@last_modified": "2018-09-07T11:12:09.222283",
+  "appTitle": "Cinematic",
+  "@appTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "search": "搜索",
+  "@search": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "favorites": "收藏",
+  "@favorites": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "movies": "电影",
+  "@movies": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "tvShows": "电视剧",
+  "@tvShows": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "language": "语言",
+  "@language": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "english": "英语",
+  "@english": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "simplifiedChinese": "简体中文",
+  "@simplifiedChinese": {
+    "type": "text",
+    "placeholders": {}
+  }
+}
