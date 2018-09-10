@@ -4,13 +4,13 @@ import 'package:cinematic_flutter/util/date_time_util.dart';
 part 'media.g.dart';
 
 @JsonSerializable()
-class Movie {
+class Media {
   @JsonKey(name: 'vote_count')
-  String voteCount;
-  String id;
-  String video;
+  int voteCount;
+  int id;
+  bool video;
   @JsonKey(name: 'vote_average')
-  String voteAverage;
+  double voteAverage;
   String title;
   double popularity;
   @JsonKey(name: 'poster_path')
@@ -20,7 +20,7 @@ class Movie {
   @JsonKey(name: 'original_title')
   String originalTitle;
   @JsonKey(name: 'genre_ids')
-  List<String> genreIds;
+  List<int> genreIds;
   @JsonKey(name: 'backdrop_path')
   String backdropPath;
   bool adult;
@@ -28,11 +28,9 @@ class Movie {
   @JsonKey(name: 'release_date', fromJson: toDateTime)
   DateTime releaseDate;
 
+  Media();
 
-  Movie();
+  factory Media.fromJson(Map<String, dynamic> json) => _$MediaFromJson(json);
 
-  factory Movie.fromJson(Map<String, dynamic> json) =>
-      _$MovieFromJson(json);
-
-  Map<String, dynamic> toJson() => _$MovieToJson(this);
+  Map<String, dynamic> toJson() => _$MediaToJson(this);
 }

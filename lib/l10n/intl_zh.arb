@@ -39,5 +39,160 @@
   "@simplifiedChinese": {
     "type": "text",
     "placeholders": {}
+  },
+  "popular": "流行",
+  "@popular": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upcoming": "即将上映",
+  "@upcoming": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "topRated": "评分最高",
+  "@topRated": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "onTheAir": "播放中",
+  "@onTheAir": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "action": "动作",
+  "@action": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "adventure": "冒险",
+  "@adventure": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "animation": "动画",
+  "@animation": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "comedy": "喜剧",
+  "@comedy": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "crime": "犯罪",
+  "@crime": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "documentary": "记录",
+  "@documentary": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "drama": "戏剧",
+  "@drama": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "family": "家庭",
+  "@family": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "kids": "儿童",
+  "@kids": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "actionAdventure": "动作&冒险",
+  "@actionAdventure": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "fantasy": "幻想",
+  "@fantasy": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "history": "历史",
+  "@history": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "horror": "恐怖",
+  "@horror": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "music": "音乐",
+  "@music": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "mystery": "神秘",
+  "@mystery": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "romance": "浪漫",
+  "@romance": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "scienceFiction": "科幻",
+  "@scienceFiction": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "tvMovie": "电视剧场",
+  "@tvMovie": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "thriller": "惊悚",
+  "@thriller": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "war": "战争",
+  "@war": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "western": "西部片",
+  "@western": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "reality": "现实",
+  "@reality": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "sciFiFantasy": "科幻&幻想",
+  "@sciFiFantasy": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "soap": "肥皂剧",
+  "@soap": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "talk": "演讲",
+  "@talk": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "warPolitics": "战争&政治",
+  "@warPolitics": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "synopsis": "剧情概要",
+  "@synopsis": {
+    "type": "text",
+    "placeholders": {}
   }
 }

@@ -1,15 +1,16 @@
 import 'package:cinematic_flutter/model/app_load_state.dart';
 import 'package:cinematic_flutter/model/app_state.dart';
 import 'package:cinematic_flutter/model/app_theme.dart';
+import 'package:cinematic_flutter/model/media_type.dart';
 import 'package:redux/redux.dart';
 import 'package:cinematic_flutter/actions/actions.dart';
 import 'package:flutter/material.dart';
 
 class MainViewModel {
-  final Store<AppState> store;
+  final Store<AppState> _store;
 
-  MainViewModel(this.store) {
-    setAppState(store);
+  MainViewModel(this._store) {
+    setAppState(_store);
   }
 
   setAppState(Store<AppState> store) {
@@ -25,7 +26,7 @@ class MainViewModel {
 
   loadSetting() {
     loadSettingState = AppLoadState.loading;
-    store.state.loadSettingState = AppLoadState.loading;
-    store.dispatch(LoadSettingAction());
+    _store.state.loadSettingState = AppLoadState.loading;
+    _store.dispatch(LoadSettingAction());
   }
 }

@@ -1,2 +1,2 @@
-export 'package:cinematic_flutter/common/routes.dart';
+export 'package:cinematic_flutter/common/navigator.dart';
 

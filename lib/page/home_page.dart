@@ -1,6 +1,7 @@
+import 'package:cinematic_flutter/model/media_type.dart';
+import 'package:cinematic_flutter/widget/app_tab_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:cinematic_flutter/widget/active_tab.dart';
 import 'package:cinematic_flutter/model/app_tab.dart';
 import 'package:cinematic_flutter/widget/media_list.dart';
 import 'package:cinematic_flutter/widget/toggle_theme_button.dart';
@@ -14,17 +15,13 @@ import 'package:logging/logging.dart';
 class HomePage extends StatelessWidget {
   final int dis = 2;
   final Logger logger = Logger('HomePage');
-  HomeViewModel vm;
+  HomeViewModel _vm;
 
   @override
   Widget build(BuildContext context) => StoreConnector<AppState, HomeViewModel>(
         distinct: true,
-        converter: (store) {
-          if (vm == null) {
-            vm = HomeViewModel(store);
-          }
-          return vm;
-        },
+        onInit: (store) => _vm = HomeViewModel.fromStore(store),
+        converter: (store) => _vm = _vm ?? HomeViewModel.fromStore(store),
         builder: buildHome,
       );
 
@@ -42,7 +39,9 @@ class HomePage extends StatelessWidget {
             )
           ],
         ),
+        body: MediaList(),
         drawer: buildDrawer(ctx, vm),
+        bottomNavigationBar: AppTabBar(),
       );
 
   Widget buildDrawer(BuildContext ctx, HomeViewModel vm) {
@@ -119,16 +118,26 @@ class HomePage extends StatelessWidget {
       onTap: () {
         switch (item.key) {
           case SEARCH_KEY:
-            {}
+            {
+              Navigator.pop(ctx);
+            }
             break;
           case FAVORITES_KEY:
-            {}
+            {
+              Navigator.pop(ctx);
+            }
             break;
           case MOVIES_KEY:
-            {}
+            {
+              vm.onMediaTypeSelected(MediaType.movie);
+              Navigator.pop(ctx);
+            }
             break;
           case TV_SHOWS_KEY:
-            {}
+            {
+              vm.onMediaTypeSelected(MediaType.tv);
+              Navigator.pop(ctx);
+            }
             break;
           case LANGUAGE_KEY:
             {

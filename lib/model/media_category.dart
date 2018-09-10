@@ -1,0 +1,1 @@
+enum MediaCategory { movie, tv }

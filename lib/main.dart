@@ -1,5 +1,6 @@
 import 'package:cinematic_flutter/model/app_load_state.dart';
 import 'package:cinematic_flutter/model/app_theme.dart';
+import 'package:cinematic_flutter/page/media_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -22,7 +23,8 @@ void main() {
 }
 
 class App extends StatelessWidget {
-  MainViewModel vm;
+  final Logger logger = Logger('App');
+  MainViewModel _vm;
   final store = Store<AppState>(
     appStateReducer,
     initialState: AppState.init(),
@@ -33,6 +35,13 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) => StoreProvider(
       store: store,
       child: StoreConnector<AppState, MainViewModel>(
+        onInit: (store) {
+          _vm = MainViewModel(store);
+          if (_vm.loadSettingState == AppLoadState.notLoaded) {
+            logger.fine('loadSetting');
+            _vm.loadSetting();
+          }
+        },
         builder: (ctx, vm) => MaterialApp(
               theme: vm.currentThemeData,
               supportedLocales: [
@@ -44,21 +53,12 @@ class App extends StatelessWidget {
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
               ],
-              initialRoute: Routes.home,
-              routes: {
-                Routes.home: (ctx) => HomePage(),
-              },
+              home: HomePage(),
             ),
         converter: (store) {
-          if (vm == null) {
-            vm = MainViewModel(store);
-          } else {
-            vm.setAppState(store);
-          }
-          if (vm.loadSettingState == AppLoadState.notLoaded) {
-            vm.loadSetting();
-          }
-          return vm;
+          _vm = _vm ?? MainViewModel(store);
+          _vm.setAppState(store);
+          return _vm;
         },
       ));
 }

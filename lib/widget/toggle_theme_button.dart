@@ -5,11 +5,13 @@ import 'package:cinematic_flutter/model/app_state.dart';
 import 'package:cinematic_flutter/viewmodel/theme_view_model.dart';
 
 class ToggleThemeButton extends StatelessWidget {
+  ThemeViewModel _vm;
+
   @override
   Widget build(BuildContext context) =>
       StoreConnector<AppState, ThemeViewModel>(
         distinct: true,
-        converter: ThemeViewModel.fromStore,
+        converter: (store) => _vm = _vm ?? ThemeViewModel.fromStore(store),
         builder: (ctx, vm) => IconButton(
               icon: Icon(
                 Icons.color_lens,

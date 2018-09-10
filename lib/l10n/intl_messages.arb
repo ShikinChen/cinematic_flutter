@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2018-09-07T15:17:18.655308",
+  "@@last_modified": "2018-09-10T16:31:23.924230",
   "appTitle": "Cinematic",
   "@appTitle": {
     "type": "text",
@@ -37,6 +37,161 @@
   },
   "simplifiedChinese": "Simplified Chinese",
   "@simplifiedChinese": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "popular": "Popular",
+  "@popular": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "upcoming": "Upcoming",
+  "@upcoming": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "topRated": "Top Rated",
+  "@topRated": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "onTheAir": "On The Air",
+  "@onTheAir": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "action": "Action",
+  "@action": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "adventure": "Adventure",
+  "@adventure": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "animation": "Animation",
+  "@animation": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "comedy": "Comedy",
+  "@comedy": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "crime": "Crime",
+  "@crime": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "documentary": "Documentary",
+  "@documentary": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "drama": "Drama",
+  "@drama": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "family": "Family",
+  "@family": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "kids": "Kids",
+  "@kids": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "actionAdventure": "Action & Adventure",
+  "@actionAdventure": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "fantasy": "Fantasy",
+  "@fantasy": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "history": "History",
+  "@history": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "horror": "Horror",
+  "@horror": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "music": "Music",
+  "@music": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "mystery": "Mystery",
+  "@mystery": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "romance": "Romance",
+  "@romance": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "scienceFiction": "Science Fiction",
+  "@scienceFiction": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "tvMovie": "TV Movie",
+  "@tvMovie": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "thriller": "Thriller",
+  "@thriller": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "war": "War",
+  "@war": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "western": "Western",
+  "@western": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "reality": "Reality",
+  "@reality": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "sciFiFantasy": "Sci-Fi & Fantasy",
+  "@sciFiFantasy": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "soap": "Soap",
+  "@soap": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "talk": "Talk",
+  "@talk": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "warPolitics": "War & Politics",
+  "@warPolitics": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "synopsis": "SYNOPSIS",
+  "@synopsis": {
     "type": "text",
     "placeholders": {}
   }

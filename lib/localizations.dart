@@ -90,6 +90,192 @@ class AppLocalizations {
         name: 'simplifiedChinese',
         args: [],
       );
+
+  String get popular => Intl.message(
+        'Popular',
+        name: 'popular',
+        args: [],
+      );
+
+  String get upcoming => Intl.message(
+        'Upcoming',
+        name: 'upcoming',
+        args: [],
+      );
+
+  String get topRated => Intl.message(
+        'Top Rated',
+        name: 'topRated',
+        args: [],
+      );
+
+  String get onTheAir => Intl.message(
+        'On The Air',
+        name: 'onTheAir',
+        args: [],
+      );
+
+  String get action => Intl.message(
+        'Action',
+        name: 'action',
+        args: [],
+      );
+
+  String get adventure => Intl.message(
+        'Adventure',
+        name: 'adventure',
+        args: [],
+      );
+
+  String get animation => Intl.message(
+        'Animation',
+        name: 'animation',
+        args: [],
+      );
+
+  String get comedy => Intl.message(
+        'Comedy',
+        name: 'comedy',
+        args: [],
+      );
+
+  String get crime => Intl.message(
+        'Crime',
+        name: 'crime',
+        args: [],
+      );
+
+  String get documentary => Intl.message(
+        'Documentary',
+        name: 'documentary',
+        args: [],
+      );
+
+  String get drama => Intl.message(
+        'Drama',
+        name: 'drama',
+        args: [],
+      );
+
+  String get family => Intl.message(
+        'Family',
+        name: 'family',
+        args: [],
+      );
+
+  String get kids => Intl.message(
+        'Kids',
+        name: 'kids',
+        args: [],
+      );
+
+  String get actionAdventure => Intl.message(
+        'Action & Adventure',
+        name: 'actionAdventure',
+        args: [],
+      );
+
+  String get fantasy => Intl.message(
+        'Fantasy',
+        name: 'fantasy',
+        args: [],
+      );
+
+  String get history => Intl.message(
+        'History',
+        name: 'history',
+        args: [],
+      );
+
+  String get horror => Intl.message(
+        'Horror',
+        name: 'horror',
+        args: [],
+      );
+
+  String get music => Intl.message(
+        'Music',
+        name: 'music',
+        args: [],
+      );
+
+  String get mystery => Intl.message(
+        'Mystery',
+        name: 'mystery',
+        args: [],
+      );
+
+  String get romance => Intl.message(
+        'Romance',
+        name: 'romance',
+        args: [],
+      );
+
+  String get scienceFiction => Intl.message(
+        'Science Fiction',
+        name: 'scienceFiction',
+        args: [],
+      );
+
+  String get tvMovie => Intl.message(
+        'TV Movie',
+        name: 'tvMovie',
+        args: [],
+      );
+
+  String get thriller => Intl.message(
+        'Thriller',
+        name: 'thriller',
+        args: [],
+      );
+
+  String get war => Intl.message(
+        'War',
+        name: 'war',
+        args: [],
+      );
+
+  String get western => Intl.message(
+        'Western',
+        name: 'western',
+        args: [],
+      );
+
+  String get reality => Intl.message(
+        'Reality',
+        name: 'reality',
+        args: [],
+      );
+
+  String get sciFiFantasy => Intl.message(
+        'Sci-Fi & Fantasy',
+        name: 'sciFiFantasy',
+        args: [],
+      );
+
+  String get soap => Intl.message(
+        'Soap',
+        name: 'soap',
+        args: [],
+      );
+
+  String get talk => Intl.message(
+        'Talk',
+        name: 'talk',
+        args: [],
+      );
+
+  String get warPolitics => Intl.message(
+        'War & Politics',
+        name: 'warPolitics',
+        args: [],
+      );
+
+  String get synopsis => Intl.message(
+        'SYNOPSIS',
+        name: 'synopsis',
+        args: [],
+      );
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

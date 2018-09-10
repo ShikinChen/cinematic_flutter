@@ -11,9 +11,8 @@ class ThemeViewModel {
 
   static ThemeViewModel fromStore(Store<AppState> store) => ThemeViewModel(
         () {
-//          print('ThemeViewModel--ToggleThemeAction');
           store.dispatch(ToggleThemeAction(
-              (store.state.currentTheme.currentThemeIndex+1) %
+              (store.state.currentTheme.currentThemeIndex + 1) %
                   AppTheme.themes.length));
         },
       );

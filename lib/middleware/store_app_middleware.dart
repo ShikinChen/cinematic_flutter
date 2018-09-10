@@ -14,6 +14,8 @@ List<Middleware<AppState>> createStoreAppMiddleware() => [
       TypedMiddleware<AppState, ToggleThemeAction>(_toggleTheme()),
       TypedMiddleware<AppState, LoadLocaleAction>(_loadLocale()),
       TypedMiddleware<AppState, LoadSettingAction>(_loadSetting()),
+      TypedMiddleware<AppState, TabSelectedAction>(_tabSelected()),
+      TypedMiddleware<AppState, MediaTypeSelectedAction>(_mediaTypeSelected()),
     ];
 
 Middleware<AppState> _toggleTheme() =>
@@ -58,4 +60,16 @@ Middleware<AppState> _loadSetting() =>
         action.loadSettingState = AppLoadState.loaded;
         next(action);
       });
+    };
+
+Middleware<AppState> _tabSelected() =>
+    (Store<AppState> store, action, NextDispatcher next) {
+      logger.fine('_tabSelected');
+      next(action);
+    };
+
+Middleware<AppState> _mediaTypeSelected() =>
+    (Store<AppState> store, action, NextDispatcher next) {
+      next(action);
+      store.dispatch(TabSelectedAction(0));
     };
