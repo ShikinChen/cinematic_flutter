@@ -276,6 +276,96 @@ class AppLocalizations {
         name: 'synopsis',
         args: [],
       );
+
+  String get cast => Intl.message(
+        'Cast',
+        name: 'cast',
+        args: [],
+      );
+
+  String get about => Intl.message(
+        'About',
+        name: 'about',
+        args: [],
+      );
+
+  String get originalTitle => Intl.message(
+        'Original Title',
+        name: 'originalTitle',
+        args: [],
+      );
+
+  String get status => Intl.message(
+        'Status',
+        name: 'status',
+        args: [],
+      );
+
+  String get runtime => Intl.message(
+        'Runtime',
+        name: 'runtime',
+        args: [],
+      );
+
+  String get type => Intl.message(
+        'Type',
+        name: 'type',
+        args: [],
+      );
+
+  String get creators => Intl.message(
+        'Creators',
+        name: 'creators',
+        args: [],
+      );
+
+  String get networks => Intl.message(
+        'Networks',
+        name: 'networks',
+        args: [],
+      );
+
+  String get seasons => Intl.message(
+        'Seasons',
+        name: 'seasons',
+        args: [],
+      );
+
+  String get premiere => Intl.message(
+        'Premiere',
+        name: 'premiere',
+        args: [],
+      );
+
+  String get latest_next_episode => Intl.message(
+        'Latest/Next Episode',
+        name: 'latest_next_episode',
+        args: [],
+      );
+
+  String get budget => Intl.message(
+        'Budget',
+        name: 'budget',
+        args: [],
+      );
+
+  String get revenue => Intl.message(
+        'Revenue',
+        name: 'revenue',
+        args: [],
+      );
+
+  String get homepage => Intl.message(
+        'Homepage',
+        name: 'homepage',
+        args: [],
+      );
+
+  String get imdb => Intl.message(
+        'Imdb',
+        name: 'imdb',
+        args: [],
+      );
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

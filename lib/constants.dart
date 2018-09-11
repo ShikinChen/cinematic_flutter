@@ -5,6 +5,8 @@ const String IMAGE_URL_LARGE = "https://image.tmdb.org/t/p/w500/";
 
 const String IMAGE_URL_MEDIUM = "https://image.tmdb.org/t/p/w300/";
 
+const String PROFILE_IMAGE_URL_MEDIUM = "https://image.tmdb.org/t/p/w185/";
+
 const String SEARCH_KEY = 'search';
 
 const String FAVORITES_KEY = 'favorites';

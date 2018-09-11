@@ -1,5 +1,9 @@
 import 'package:cinematic_flutter/localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+final dateFormat = DateFormat.yMMMMd('zh_CN');
+final dollarFormat = NumberFormat("#,##0.00", "zh_CN");
 
 Map<int, String> _genreMap(BuildContext ctx) => {
       28: AppLocalizations.of(ctx).action,
@@ -39,3 +43,19 @@ String getGenreString(List<int> genreIds, BuildContext ctx) {
   buffer.writeAll(getGenresForIds(genreIds, ctx), ", ");
   return buffer.toString();
 }
+
+String formatRuntime(int runtime) {
+  int hours = runtime ~/ 60;
+  int minutes = runtime % 60;
+  return '$hours\h $minutes\m';
+}
+
+String formatDate(DateTime dateTime) {
+  try {
+    return dateFormat.format(dateTime);
+  } catch (Exception) {
+    return "";
+  }
+}
+
+String formatNumberToDollars(int amount) => '\$${dollarFormat.format(amount)}';
