@@ -1,3 +1,4 @@
+import 'package:cinematic_flutter/model/app_locale.dart';
 import 'package:flutter/material.dart';
 import 'package:cinematic_flutter/localizations.dart';
 import 'package:cinematic_flutter/viewmodel/home_view_model.dart';
@@ -36,7 +37,7 @@ class LanguageDialog {
 
 class LocaleItem {
   String text;
-  Locale locale;
+  AppLocale locale;
 
   LocaleItem(this.text, this.locale);
 }

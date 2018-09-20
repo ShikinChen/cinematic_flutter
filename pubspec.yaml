@@ -25,9 +25,10 @@ dependencies:
   intl: ^0.15.7
   flutter_redux: ^0.5.2
   json_annotation: ^1.1.0
-  dio: ^1.0.3
+  dio: ^1.0.5
   intl_translation: ^0.17.0
   logging: ^0.11.3+2
+  rxdart: ^0.18.1
 
 
 dev_dependencies:

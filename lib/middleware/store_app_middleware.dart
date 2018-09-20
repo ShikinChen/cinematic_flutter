@@ -1,4 +1,6 @@
 import 'package:cinematic_flutter/model/app_load_state.dart';
+import 'package:cinematic_flutter/model/app_locale.dart';
+import 'package:cinematic_flutter/util/api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:cinematic_flutter/model/app_state.dart';
@@ -31,10 +33,12 @@ Middleware<AppState> _toggleTheme() =>
 Middleware<AppState> _loadLocale() =>
     (Store<AppState> store, action, NextDispatcher next) {
       if (store.state.currentLocale != action.locale) {
-        setSharedPreferencesString(APP_LOCALE_KEY, action.locale.languageCode)
+        setSharedPreferencesString(
+                APP_LOCALE_KEY, action.locale.locale.languageCode)
             .then((b) {
           if (b) {
-            AppLocalizations.load(action.locale);
+            AppLocalizations.load(action.locale.locale);
+            setApiClientlanguage(action.locale.language);
             next(action);
           }
         });
@@ -51,11 +55,12 @@ Middleware<AppState> _loadSetting() =>
         }
         return getSharedPreferencesValue(APP_LOCALE_KEY);
       }).then((value) {
-        Locale locale = AppLocalizations.getLocale(value);
+        AppLocale locale = AppLocalizations.getLocale(value);
         logger.fine('currentLocale:${value}');
         if (locale != null) {
           action.currentLocale = locale;
-          AppLocalizations.load(locale);
+          AppLocalizations.load(locale.locale);
+          setApiClientlanguage(locale.language);
         }
         action.loadSettingState = AppLoadState.loaded;
         next(action);
@@ -73,3 +78,9 @@ Middleware<AppState> _mediaTypeSelected() =>
       next(action);
       store.dispatch(TabSelectedAction(0));
     };
+
+setApiClientlanguage(String language) {
+  if (language != null) {
+    ApiClient().language = language;
+  }
+}

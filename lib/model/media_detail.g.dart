@@ -51,7 +51,10 @@ MediaDetail _$MediaDetailFromJson(Map<String, dynamic> json) {
     ..revenue = json['revenue'] as int
     ..runtime = json['runtime'] as int
     ..status = json['status'] as String
-    ..tagline = json['tagline'] as String;
+    ..tagline = json['tagline'] as String
+    ..originalName = json['original_name'] as String
+    ..homepage = json['homepage'] as String
+    ..imdbId = json['imdb_id'] as String;
 }
 
 Map<String, dynamic> _$MediaDetailToJson(MediaDetail instance) =>
@@ -79,5 +82,8 @@ Map<String, dynamic> _$MediaDetailToJson(MediaDetail instance) =>
       'revenue': instance.revenue,
       'runtime': instance.runtime,
       'status': instance.status,
-      'tagline': instance.tagline
+      'tagline': instance.tagline,
+      'original_name': instance.originalName,
+      'homepage': instance.homepage,
+      'imdb_id': instance.imdbId
     };

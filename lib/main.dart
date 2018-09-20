@@ -45,8 +45,8 @@ class App extends StatelessWidget {
         builder: (ctx, vm) => MaterialApp(
               theme: vm.currentThemeData,
               supportedLocales: [
-                AppLocalizations.ZH_LOCALE,
-                AppLocalizations.EN_LOCALE,
+                AppLocalizations.ZH_LOCALE.locale,
+                AppLocalizations.EN_LOCALE.locale,
               ],
               localizationsDelegates: [
                 AppLocalizationsDelegate(),

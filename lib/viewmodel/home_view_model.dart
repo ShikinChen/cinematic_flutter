@@ -1,3 +1,4 @@
+import 'package:cinematic_flutter/model/app_locale.dart';
 import 'package:cinematic_flutter/model/app_state.dart';
 import 'package:cinematic_flutter/model/media_type.dart';
 import 'package:redux/redux.dart';
@@ -5,7 +6,7 @@ import 'package:cinematic_flutter/actions/actions.dart';
 import 'package:flutter/material.dart';
 
 class HomeViewModel {
-  final Function(Locale) loadLocale;
+  final Function(AppLocale) loadLocale;
   final Function(MediaType) onMediaTypeSelected;
 
   HomeViewModel(

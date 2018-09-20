@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
+import 'package:cinematic_flutter/model/app_locale.dart';
 import 'package:redux/redux.dart';
 import 'package:cinematic_flutter/actions/actions.dart';
 
-final localeReducer = combineReducers<Locale>([
-  TypedReducer<Locale, LoadLocaleAction>(_loadLocaleReducer),
-  TypedReducer<Locale, LoadSettingAction>(_loadSettingReducer),
+final localeReducer = combineReducers<AppLocale>([
+  TypedReducer<AppLocale, LoadLocaleAction>(_loadLocaleReducer),
+  TypedReducer<AppLocale, LoadSettingAction>(_loadSettingReducer),
 ]);
 
-Locale _loadLocaleReducer(Locale locale, loadLocaleAction) =>
+AppLocale _loadLocaleReducer(AppLocale locale, loadLocaleAction) =>
     loadLocaleAction.locale;
 
-Locale _loadSettingReducer(Locale locale, loadSettingAction) =>
+AppLocale _loadSettingReducer(AppLocale locale, loadSettingAction) =>
     loadSettingAction.currentLocale;

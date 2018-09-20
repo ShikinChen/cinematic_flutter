@@ -7,29 +7,36 @@ import 'package:cinematic_flutter/viewmodel/media_view_model.dart';
 import 'package:logging/logging.dart';
 
 class MediaList extends StatelessWidget {
-  MediaViewModel _vm;
-  final Logger logger = Logger('MediaList');
+  final MediaViewModel _vm = MediaViewModel();
+  final Logger logger = Logger('MediaListState');
   final _scrollController = new ScrollController();
 
-  @override
-  Widget build(BuildContext context) =>
-      StoreConnector<AppState, MediaViewModel>(
-        onInit: (store) => _vm = MediaViewModel.fromStore(store),
-        converter: (store) => _vm = _vm ?? MediaViewModel.fromStore(store),
-        builder: (ctx, vm) => vm.list == null
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : buildMediaList(ctx, vm),
-      );
+  MediaList() {
+    _vm.page.add(1);
+  }
 
-  Widget buildMediaList(BuildContext ctx, MediaViewModel vm) =>
-      RefreshIndicator(
-        onRefresh: () => null,
-        child: ListView.builder(
-          controller: _scrollController,
-          itemCount: vm.list.length,
-          itemBuilder: (ctx, index) => MediaListItem(vm.list[index]),
-        ),
-      );
+  Widget buildMediaList(BuildContext ctx, List<Media> list) {
+    return RefreshIndicator(
+      onRefresh: () => null,
+      child: ListView.builder(
+        controller: _scrollController,
+        itemCount: list.length,
+        itemBuilder: (ctx, index) => MediaListItem(list[index]),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<MediaListState>(
+        stream: _vm.mediaList,
+        initialData: MediaListState(),
+        builder: (BuildContext ctx, AsyncSnapshot<MediaListState> snapshot) {
+          return snapshot.data.list == null
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : buildMediaList(context, snapshot.data.list);
+        });
+  }
 }

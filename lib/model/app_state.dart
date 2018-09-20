@@ -7,13 +7,14 @@ import 'package:cinematic_flutter/model/media_type.dart';
 import 'package:flutter/widgets.dart';
 import 'package:cinematic_flutter/util/shared_preferences_util.dart';
 import 'package:cinematic_flutter/constants.dart';
+import 'package:cinematic_flutter/model/app_locale.dart';
 
 class AppState {
   int activeTabIndex;
   MediaType mediaType = MediaType.movie;
 
   AppTheme currentTheme;
-  Locale currentLocale;
+  AppLocale currentLocale;
   AppLoadState loadSettingState = AppLoadState.notLoaded;
 
   dynamic data;

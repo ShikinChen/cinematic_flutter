@@ -1,4 +1,5 @@
 import 'package:cinematic_flutter/model/app_load_state.dart';
+import 'package:cinematic_flutter/model/app_locale.dart';
 import 'package:cinematic_flutter/model/media_type.dart';
 import 'package:flutter/material.dart';
 
@@ -9,14 +10,14 @@ class ToggleThemeAction {
 }
 
 class LoadLocaleAction {
-  final Locale locale;
+  final AppLocale locale;
 
   LoadLocaleAction(this.locale);
 }
 
 class LoadSettingAction {
   int themeIndex;
-  Locale currentLocale;
+  AppLocale currentLocale;
   AppLoadState loadSettingState;
 }
 

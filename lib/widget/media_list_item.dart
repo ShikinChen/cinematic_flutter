@@ -89,14 +89,16 @@ class MediaListItem extends StatelessWidget {
             children: <Widget>[
               Hero(
                 tag: 'media_tag_${media.id}',
-                child: FadeInImage.assetNetwork(
-                  placeholder: 'assets/images/placeholder.jpg',
-                  image: media.backdropPath,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  height: 200.0,
-                  fadeInDuration: Duration(milliseconds: 50),
-                ),
+                child: media.backdropPath == null
+                    ? Image.asset('assets/images/placeholder.jpg')
+                    : FadeInImage.assetNetwork(
+                        placeholder: 'assets/images/placeholder.jpg',
+                        image: media.backdropPath,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        height: 200.0,
+                        fadeInDuration: Duration(milliseconds: 50),
+                      ),
               ),
               _getTitleSection(context),
             ],

@@ -1,21 +1,28 @@
 import 'dart:async';
 
+import 'package:cinematic_flutter/util/api_client.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/widgets.dart';
 import 'package:cinematic_flutter/l10n/messages_all.dart';
 import 'package:flutter/material.dart';
+import 'package:cinematic_flutter/model/app_locale.dart';
 
 class AppLocalizations {
   static const String EN = 'en';
   static const String ZH = 'zh';
-  static const Locale EN_LOCALE = Locale(EN, "");
-  static const Locale ZH_LOCALE = Locale(ZH, "");
+  static const AppLocale EN_LOCALE = AppLocale('en-US', Locale(EN, ""));
+  static const AppLocale ZH_LOCALE = AppLocale('zh', Locale(ZH, ""));
 
   static Future<AppLocalizations> load(Locale locale) {
     if (locale != null) {
       final String name =
           locale.countryCode.isEmpty ? locale.languageCode : locale.toString();
       final String localeName = Intl.canonicalizedLocale(name);
+      if (locale.languageCode.contains(EN)) {
+        ApiClient().language = EN;
+      } else {
+        ApiClient().language = ZH;
+      }
 
       return initializeMessages(localeName).then((bool _) {
         Intl.defaultLocale = localeName;
@@ -25,7 +32,7 @@ class AppLocalizations {
     return null;
   }
 
-  static Locale getLocale(String localeName) {
+  static AppLocale getLocale(String localeName) {
     switch (localeName) {
       case EN:
         {
@@ -364,6 +371,12 @@ class AppLocalizations {
   String get imdb => Intl.message(
         'Imdb',
         name: 'imdb',
+        args: [],
+      );
+
+  String get similar => Intl.message(
+        'Similar',
+        name: 'similar',
         args: [],
       );
 }
