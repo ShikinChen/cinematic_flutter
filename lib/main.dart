@@ -3,8 +3,6 @@ import 'package:cinematic_flutter/model/app_theme.dart';
 import 'package:cinematic_flutter/page/media_detail_page.dart';
 import 'package:cinematic_flutter/provider/app_state_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
 import 'package:cinematic_flutter/page/home_page.dart';
 import 'package:cinematic_flutter/model/app_state.dart';
 import 'package:cinematic_flutter/common/common.dart';

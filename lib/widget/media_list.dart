@@ -1,7 +1,6 @@
 import 'package:cinematic_flutter/model/media.dart';
 import 'package:cinematic_flutter/widget/media_list_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:cinematic_flutter/model/app_state.dart';
 import 'package:cinematic_flutter/bloc/media_bloc.dart';
 import 'package:logging/logging.dart';

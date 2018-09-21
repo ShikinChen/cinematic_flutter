@@ -5,7 +5,6 @@ import 'package:cinematic_flutter/model/app_state.dart';
 import 'package:cinematic_flutter/model/media.dart';
 import 'package:cinematic_flutter/model/media_list_res.dart';
 import 'package:cinematic_flutter/util/api_client.dart';
-import 'package:redux/redux.dart';
 import 'package:cinematic_flutter/util/date_time_util.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:logging/logging.dart';
