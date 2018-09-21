@@ -1,19 +1,19 @@
 import 'package:cinematic_flutter/model/app_locale.dart';
+import 'package:cinematic_flutter/provider/app_state_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cinematic_flutter/localizations.dart';
-import 'package:cinematic_flutter/viewmodel/home_view_model.dart';
 
 class LanguageDialog {
-  static SimpleDialog of(BuildContext ctx, HomeViewModel vm) {
+  static SimpleDialog of(BuildContext ctx) {
     Text title = Text(AppLocalizations.of(ctx).language);
     return SimpleDialog(
       title: title,
-      children: buildSimpleDialogOption(ctx, vm),
+      children: buildSimpleDialogOption(ctx),
     );
   }
 
-  static List<Widget> buildSimpleDialogOption(
-      BuildContext ctx, HomeViewModel vm) {
+  static List<Widget> buildSimpleDialogOption(BuildContext ctx) {
+    final appStateBloc = AppStateProvider.of(ctx);
     return [
       LocaleItem(
         AppLocalizations.of(ctx).simplifiedChinese,
@@ -26,7 +26,7 @@ class LanguageDialog {
     ]
         .map((item) => new SimpleDialogOption(
               onPressed: () {
-                vm.loadLocale(item.locale);
+                appStateBloc.loadLocaleAction(item.locale);
                 Navigator.pop(ctx);
               },
               child: Text(item.text),

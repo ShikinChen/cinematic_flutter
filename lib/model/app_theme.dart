@@ -11,7 +11,7 @@ class AppTheme {
   ThemeData _themeData;
 
   set currentThemeIndex(int value) {
-    logger.fine('_currentThemeIndex:${_currentThemeIndex}');
+//    logger.fine('_currentThemeIndex:${_currentThemeIndex}');
     _currentThemeIndex = value??0;
     _themeData = themes[_currentThemeIndex];
   }

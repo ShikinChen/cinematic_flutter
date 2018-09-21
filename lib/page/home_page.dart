@@ -1,31 +1,21 @@
+import 'package:cinematic_flutter/bloc/app_state_bloc.dart';
 import 'package:cinematic_flutter/model/media_type.dart';
+import 'package:cinematic_flutter/provider/app_state_provider.dart';
 import 'package:cinematic_flutter/widget/app_tab_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:cinematic_flutter/model/app_tab.dart';
 import 'package:cinematic_flutter/widget/media_list.dart';
 import 'package:cinematic_flutter/widget/toggle_theme_button.dart';
-import 'package:cinematic_flutter/model/app_state.dart';
 import 'package:cinematic_flutter/localizations.dart';
 import 'package:cinematic_flutter/constants.dart';
 import 'package:cinematic_flutter/widget/language_dialog.dart';
-import 'package:cinematic_flutter/viewmodel/home_view_model.dart';
 import 'package:logging/logging.dart';
 
 class HomePage extends StatelessWidget {
   final int dis = 2;
   final Logger logger = Logger('HomePage');
-  HomeViewModel _vm;
 
   @override
-  Widget build(BuildContext context) => StoreConnector<AppState, HomeViewModel>(
-        distinct: true,
-        onInit: (store) => _vm = HomeViewModel.fromStore(store),
-        converter: (store) => _vm = _vm ?? HomeViewModel.fromStore(store),
-        builder: buildHome,
-      );
-
-  Widget buildHome(BuildContext ctx, HomeViewModel vm) => Scaffold(
+  Widget build(BuildContext ctx) => Scaffold(
         appBar: AppBar(
           title: Text(AppLocalizations.of(ctx).appTitle),
           actions: <Widget>[
@@ -40,15 +30,15 @@ class HomePage extends StatelessWidget {
           ],
         ),
         body: MediaList(),
-        drawer: buildDrawer(ctx, vm),
+        drawer: buildDrawer(ctx),
         bottomNavigationBar: AppTabBar(),
       );
 
-  Widget buildDrawer(BuildContext ctx, HomeViewModel vm) {
+  Widget buildDrawer(BuildContext ctx) {
     List<_DrawerItem> list = createDrawerItemList(ctx);
     return Drawer(
       child: ListView.builder(
-        itemBuilder: (ctx, index) => buildDrawerItem(ctx, vm, list, index),
+        itemBuilder: (ctx, index) => buildDrawerItem(ctx, list, index),
         itemCount: list.length + 1 + list.length ~/ dis,
       ),
     );
@@ -85,8 +75,8 @@ class HomePage extends StatelessWidget {
     ];
   }
 
-  Widget buildDrawerItem(
-      BuildContext ctx, HomeViewModel vm, List<_DrawerItem> list, int index) {
+  Widget buildDrawerItem(BuildContext ctx, List<_DrawerItem> list, int index) {
+    final appState = AppStateProvider.of(ctx);
     if (index == 0) {
       return DrawerHeader(
         padding: EdgeInsets.all(0.0),
@@ -129,13 +119,13 @@ class HomePage extends StatelessWidget {
             break;
           case MOVIES_KEY:
             {
-              vm.onMediaTypeSelected(MediaType.movie);
+              appState.onMediaTypeSelectedAction(MediaType.movie);
               Navigator.pop(ctx);
             }
             break;
           case TV_SHOWS_KEY:
             {
-              vm.onMediaTypeSelected(MediaType.tv);
+              appState.onMediaTypeSelectedAction(MediaType.tv);
               Navigator.pop(ctx);
             }
             break;
@@ -143,10 +133,7 @@ class HomePage extends StatelessWidget {
             {
               showDialog(
                 context: ctx,
-                builder: (ctx) => LanguageDialog.of(
-                      ctx,
-                      vm,
-                    ),
+                builder: (ctx) => LanguageDialog.of(ctx),
               );
             }
             break;

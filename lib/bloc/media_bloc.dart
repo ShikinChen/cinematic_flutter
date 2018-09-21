@@ -10,7 +10,7 @@ import 'package:cinematic_flutter/util/date_time_util.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:logging/logging.dart';
 
-class MediaViewModel {
+class MediaBloc {
   final Logger logger = Logger('MediaBloc');
   final PublishSubject<int> _pageController = PublishSubject<int>();
   final BehaviorSubject<MediaListState> _mediaListSubject =
@@ -22,7 +22,7 @@ class MediaViewModel {
 
   Sink<int> get page => _pageController.sink;
 
-  MediaViewModel() {
+  MediaBloc() {
     _pageController.stream.listen(_getMediaList);
   }
 

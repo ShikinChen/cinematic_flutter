@@ -3,16 +3,16 @@ import 'package:cinematic_flutter/widget/media_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:cinematic_flutter/model/app_state.dart';
-import 'package:cinematic_flutter/viewmodel/media_view_model.dart';
+import 'package:cinematic_flutter/bloc/media_bloc.dart';
 import 'package:logging/logging.dart';
 
 class MediaList extends StatelessWidget {
-  final MediaViewModel _vm = MediaViewModel();
+  final MediaBloc mediaBloc = MediaBloc();
   final Logger logger = Logger('MediaListState');
   final _scrollController = new ScrollController();
 
   MediaList() {
-    _vm.page.add(1);
+    mediaBloc.page.add(1);
   }
 
   Widget buildMediaList(BuildContext ctx, List<Media> list) {
@@ -29,7 +29,7 @@ class MediaList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<MediaListState>(
-        stream: _vm.mediaList,
+        stream: mediaBloc.mediaList,
         initialData: MediaListState(),
         builder: (BuildContext ctx, AsyncSnapshot<MediaListState> snapshot) {
           return snapshot.data.list == null

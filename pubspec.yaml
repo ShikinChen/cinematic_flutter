@@ -23,7 +23,6 @@ dependencies:
   scoped_model: ^0.3.0
   shared_preferences: "^0.4.2"
   intl: ^0.15.7
-  flutter_redux: ^0.5.2
   json_annotation: ^1.1.0
   dio: ^1.0.5
   intl_translation: ^0.17.0

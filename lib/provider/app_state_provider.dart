@@ -1,23 +1,24 @@
 import 'package:cinematic_flutter/model/app_state.dart';
+import 'package:cinematic_flutter/bloc/app_state_bloc.dart';
 import 'package:flutter/material.dart';
 
 class AppStateProvider extends InheritedWidget {
-  final AppState appState;
+  final AppStateBloc appStateBloc;
 
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
 
   AppStateProvider({
     Key key,
-    AppState appState,
+    AppStateBloc appStateBloc,
     Widget child,
-  })  : appState = appState ?? AppState(),
+  })  : appStateBloc = appStateBloc ?? AppStateBloc(),
         super(
           key: key,
           child: child,
         );
 
-  static AppState of(BuildContext ctx) =>
+  static AppStateBloc of(BuildContext ctx) =>
       (ctx.inheritFromWidgetOfExactType(AppStateProvider) as AppStateProvider)
-          .appState;
+          .appStateBloc;
 }

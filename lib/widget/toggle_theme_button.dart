@@ -1,23 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:redux/redux.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:cinematic_flutter/model/app_state.dart';
-import 'package:cinematic_flutter/viewmodel/theme_view_model.dart';
+import 'package:cinematic_flutter/provider/app_state_provider.dart';
+import 'package:flutter/material.dart';
 
 class ToggleThemeButton extends StatelessWidget {
-  ThemeViewModel _vm;
-
   @override
-  Widget build(BuildContext context) =>
-      StoreConnector<AppState, ThemeViewModel>(
-        distinct: true,
-        converter: (store) => _vm = _vm ?? ThemeViewModel.fromStore(store),
-        builder: (ctx, vm) => IconButton(
-              icon: Icon(
-                Icons.color_lens,
-                color: Colors.white,
-              ),
-              onPressed: vm.toggleTheme,
-            ),
-      );
+  Widget build(BuildContext context) {
+    final appStateBloc = AppStateProvider.of(context);
+    return IconButton(
+      icon: Icon(
+        Icons.color_lens,
+        color: Colors.white,
+      ),
+      onPressed: () => appStateBloc.toggleThemeAction(),
+    );
+  }
 }
