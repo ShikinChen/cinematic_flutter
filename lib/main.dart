@@ -1,7 +1,9 @@
+import 'package:cinematic_flutter/bloc/media_bloc.dart';
 import 'package:cinematic_flutter/model/app_load_state.dart';
 import 'package:cinematic_flutter/model/app_theme.dart';
 import 'package:cinematic_flutter/page/media_detail_page.dart';
 import 'package:cinematic_flutter/provider/app_state_provider.dart';
+import 'package:cinematic_flutter/provider/media_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cinematic_flutter/page/home_page.dart';
 import 'package:cinematic_flutter/model/app_state.dart';
@@ -21,35 +23,40 @@ void main() {
 
 class App extends StatelessWidget {
   final Logger logger = Logger('App');
+  final HomePage homePage = HomePage();
 
   final AppStateBloc appStateBloc = AppStateBloc();
+  final MediaBloc mediaBloc = MediaBloc();
 
   App() {
-    appStateBloc.loadSettingAction();
+    appStateBloc.loadSettingAction(() {
+      mediaBloc.getMediaListAction();
+    });
   }
 
   @override
   Widget build(BuildContext context) => AppStateProvider(
         appStateBloc: appStateBloc,
-        child: StreamBuilder<AppState>(
-          stream: appStateBloc.appState,
-          initialData: AppState.init(),
-          builder: (BuildContext ctx, AsyncSnapshot<AppState> snapshot) =>
-              MaterialApp(
-                theme: snapshot.data.currentTheme.themeData,
-                supportedLocales: [
-                  AppLocalizations.ZH_LOCALE.locale,
-                  AppLocalizations.EN_LOCALE.locale,
-                ],
-                localizationsDelegates: [
-                  AppLocalizationsDelegate(),
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                ],
-                home: Center(
-                  child: HomePage(),
+        child: MediaProvider(
+          mediaBloc: mediaBloc,
+          child: StreamBuilder<AppState>(
+            stream: appStateBloc.appState,
+            initialData: AppState.init(),
+            builder: (BuildContext ctx, AsyncSnapshot<AppState> snapshot) =>
+                MaterialApp(
+                  theme: snapshot.data.currentTheme.themeData,
+                  supportedLocales: [
+                    AppLocalizations.ZH_LOCALE.locale,
+                    AppLocalizations.EN_LOCALE.locale,
+                  ],
+                  localizationsDelegates: [
+                    AppLocalizationsDelegate(),
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                  ],
+                  home: homePage,
                 ),
-              ),
+          ),
         ),
       );
 }

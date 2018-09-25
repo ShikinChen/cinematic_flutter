@@ -7,8 +7,7 @@ part of 'media_list_res.dart';
 // **************************************************************************
 
 MediaListRes _$MediaListResFromJson(Map<String, dynamic> json) {
-  return MediaListRes()
-    ..page = json['page'] as int
+  return MediaListRes(page: json['page'] as int)
     ..totalResults = json['total_results'] as int
     ..totalPages = json['total_pages'] as int
     ..results = (json['results'] as List)

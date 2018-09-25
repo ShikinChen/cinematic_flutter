@@ -1,6 +1,9 @@
 import 'package:cinematic_flutter/bloc/app_state_bloc.dart';
+import 'package:cinematic_flutter/bloc/media_bloc.dart';
+import 'package:cinematic_flutter/model/app_state.dart';
 import 'package:cinematic_flutter/model/media_type.dart';
 import 'package:cinematic_flutter/provider/app_state_provider.dart';
+import 'package:cinematic_flutter/provider/media_provider.dart';
 import 'package:cinematic_flutter/widget/app_tab_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:cinematic_flutter/widget/media_list.dart';
@@ -13,6 +16,7 @@ import 'package:logging/logging.dart';
 class HomePage extends StatelessWidget {
   final int dis = 2;
   final Logger logger = Logger('HomePage');
+  final mediaList = MediaList();
 
   @override
   Widget build(BuildContext ctx) => Scaffold(
@@ -29,19 +33,26 @@ class HomePage extends StatelessWidget {
             )
           ],
         ),
-        body: MediaList(),
+        body: mediaList,
         drawer: buildDrawer(ctx),
         bottomNavigationBar: AppTabBar(),
       );
 
   Widget buildDrawer(BuildContext ctx) {
-    List<_DrawerItem> list = createDrawerItemList(ctx);
-    return Drawer(
-      child: ListView.builder(
-        itemBuilder: (ctx, index) => buildDrawerItem(ctx, list, index),
-        itemCount: list.length + 1 + list.length ~/ dis,
-      ),
-    );
+    final appStateBloc = AppStateProvider.of(ctx);
+
+    return StreamBuilder<AppState>(
+        stream: appStateBloc.appState,
+        initialData: AppState.init(),
+        builder: (BuildContext ctx, AsyncSnapshot<AppState> snapshot) {
+          List<_DrawerItem> list = createDrawerItemList(ctx);
+          return Drawer(
+            child: ListView.builder(
+              itemBuilder: (ctx, index) => buildDrawerItem(ctx, list, index),
+              itemCount: list.length + 1 + list.length ~/ dis,
+            ),
+          );
+        });
   }
 
   List<_DrawerItem> createDrawerItemList(BuildContext ctx) {
@@ -77,6 +88,7 @@ class HomePage extends StatelessWidget {
 
   Widget buildDrawerItem(BuildContext ctx, List<_DrawerItem> list, int index) {
     final appState = AppStateProvider.of(ctx);
+    final mediaBloc = MediaProvider.of(ctx);
     if (index == 0) {
       return DrawerHeader(
         padding: EdgeInsets.all(0.0),
@@ -119,13 +131,17 @@ class HomePage extends StatelessWidget {
             break;
           case MOVIES_KEY:
             {
+              mediaBloc.mediaType = MediaType.movie;
               appState.onMediaTypeSelectedAction(MediaType.movie);
+              mediaBloc.getMediaListAction(len: -1);
               Navigator.pop(ctx);
             }
             break;
           case TV_SHOWS_KEY:
             {
+              mediaBloc.mediaType = MediaType.tv;
               appState.onMediaTypeSelectedAction(MediaType.tv);
+              mediaBloc.getMediaListAction(len: -1);
               Navigator.pop(ctx);
             }
             break;

@@ -12,6 +12,7 @@ class Media {
   @JsonKey(name: 'vote_average')
   double voteAverage;
   String title;
+  String name;
   double popularity;
   @JsonKey(name: 'poster_path')
   String posterPath;
@@ -27,6 +28,8 @@ class Media {
   String overview;
   @JsonKey(name: 'release_date', fromJson: toDateTime)
   DateTime releaseDate;
+  @JsonKey(name: 'first_air_date', fromJson: toDateTime)
+  DateTime firstAirDate;
 
   Media();
 

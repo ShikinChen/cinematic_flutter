@@ -6,6 +6,7 @@ import 'package:cinematic_flutter/model/app_locale.dart';
 import 'package:cinematic_flutter/model/app_state.dart';
 import 'package:cinematic_flutter/model/app_theme.dart';
 import 'package:cinematic_flutter/model/media_type.dart';
+import 'package:cinematic_flutter/util/api_client.dart';
 import 'package:logging/logging.dart';
 import 'package:cinematic_flutter/actions/actions.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cinematic_flutter/localizations.dart';
 
 class AppStateBloc {
+  VoidCallback _loadLocaleFunc;
   final Logger logger = Logger('AppStateBloc');
   final PublishSubject<dynamic> _loadSettingController =
       PublishSubject<dynamic>();
@@ -55,6 +57,7 @@ class AppStateBloc {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String language = await prefs.get(LANGUAGE_KEY);
     if (language != null) {
+      logger.fine('language--${language}');
       AppLocale appLocale = AppLocalizations.getLocale(language);
       AppLocalizations.load(appLocale.locale);
       _appState.currentLocale = appLocale;
@@ -65,6 +68,9 @@ class AppStateBloc {
       _appState.currentTheme = AppTheme()..currentThemeIndex = appTheme;
     }
     _appStateSubject.add(_appState);
+    if (_loadLocaleFunc != null) {
+      _loadLocaleFunc();
+    }
   }
 
   void _toggleTheme(int currentTheme) async {
@@ -86,6 +92,9 @@ class AppStateBloc {
         _appState.currentLocale = appLocale;
         AppLocalizations.load(appLocale.locale);
         _appStateSubject.add(_appState);
+        if (_loadLocaleFunc != null) {
+          _loadLocaleFunc();
+        }
       }
     }
   }
@@ -100,7 +109,8 @@ class AppStateBloc {
     _onTabSelected(0);
   }
 
-  void loadSettingAction() {
+  void loadSettingAction(VoidCallback loadLocaleFunc) {
+    _loadLocaleFunc = loadLocaleFunc;
     logger.fine('loadSettingAction');
     loadSetting.add(Null);
   }
@@ -110,7 +120,8 @@ class AppStateBloc {
         AppTheme.themes.length);
   }
 
-  void loadLocaleAction(AppLocale appLocale) {
+  void loadLocaleAction(AppLocale appLocale, VoidCallback loadLocaleFunc) {
+    _loadLocaleFunc = loadLocaleFunc;
     loadLocale.add(appLocale);
   }
 

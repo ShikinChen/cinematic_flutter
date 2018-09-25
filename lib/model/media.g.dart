@@ -13,6 +13,7 @@ Media _$MediaFromJson(Map<String, dynamic> json) {
     ..video = json['video'] as bool
     ..voteAverage = (json['vote_average'] as num)?.toDouble()
     ..title = json['title'] as String
+    ..name = json['name'] as String
     ..popularity = (json['popularity'] as num)?.toDouble()
     ..posterPath = json['poster_path'] as String
     ..originalLanguage = json['original_language'] as String
@@ -23,7 +24,10 @@ Media _$MediaFromJson(Map<String, dynamic> json) {
     ..overview = json['overview'] as String
     ..releaseDate = json['release_date'] == null
         ? null
-        : toDateTime(json['release_date'] as String);
+        : toDateTime(json['release_date'] as String)
+    ..firstAirDate = json['first_air_date'] == null
+        ? null
+        : toDateTime(json['first_air_date'] as String);
 }
 
 Map<String, dynamic> _$MediaToJson(Media instance) => <String, dynamic>{
@@ -32,6 +36,7 @@ Map<String, dynamic> _$MediaToJson(Media instance) => <String, dynamic>{
       'video': instance.video,
       'vote_average': instance.voteAverage,
       'title': instance.title,
+      'name': instance.name,
       'popularity': instance.popularity,
       'poster_path': instance.posterPath,
       'original_language': instance.originalLanguage,
@@ -40,5 +45,6 @@ Map<String, dynamic> _$MediaToJson(Media instance) => <String, dynamic>{
       'backdrop_path': instance.backdropPath,
       'adult': instance.adult,
       'overview': instance.overview,
-      'release_date': instance.releaseDate?.toIso8601String()
+      'release_date': instance.releaseDate?.toIso8601String(),
+      'first_air_date': instance.firstAirDate?.toIso8601String()
     };

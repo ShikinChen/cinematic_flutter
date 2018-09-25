@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:cinematic_flutter/l10n/messages_all.dart';
 import 'package:flutter/material.dart';
 import 'package:cinematic_flutter/model/app_locale.dart';
+import 'package:logging/logging.dart';
 
 class AppLocalizations {
   static const String EN = 'en';
@@ -15,9 +16,11 @@ class AppLocalizations {
 
   static Future<AppLocalizations> load(Locale locale) {
     if (locale != null) {
+      Logger logger = Logger('AppLocalizations');
       final String name =
           locale.countryCode.isEmpty ? locale.languageCode : locale.toString();
       final String localeName = Intl.canonicalizedLocale(name);
+      logger.fine('locale.languageCode--${locale.languageCode}');
       if (locale.languageCode.contains(EN)) {
         ApiClient().language = EN;
       } else {

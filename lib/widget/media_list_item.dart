@@ -18,7 +18,7 @@ class MediaListItem extends StatelessWidget {
                 children: <Widget>[
                   Container(
                     child: Text(
-                      media.title,
+                      media.title ?? media.name,
                       style: Theme.of(ctx).textTheme.subhead.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -63,7 +63,7 @@ class MediaListItem extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     Text(
-                      media.releaseDate.year.toString(),
+                      (media.releaseDate ?? media.firstAirDate).year.toString(),
                       style: Theme.of(ctx).textTheme.body1,
                     ),
                     Container(
