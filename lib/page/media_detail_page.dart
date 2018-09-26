@@ -15,11 +15,16 @@ import 'package:cinematic_flutter/widget/similar_section.dart';
 import 'package:logging/logging.dart';
 
 class MediaDetailPage extends StatelessWidget {
-  final Media media;
+  Media _media;
   final Logger logger = Logger('MediaDetailPage');
   final MediaBloc mediaBloc = MediaBloc();
 
-  MediaDetailPage(this.media);
+  MediaDetailPage(Media media) {
+    this._media = media;
+    mediaBloc.getCastListAction(media.id);
+    mediaBloc.getMediaDetailAction(media.id);
+    mediaBloc.getSimilarListAction(media.id);
+  }
 
   final tagBgColor = Color(0xffF47663);
 
@@ -34,7 +39,7 @@ class MediaDetailPage extends StatelessWidget {
       );
 
   Widget _buildAppBar(BuildContext ctx) {
-    logger.fine('media.id--${media.id}');
+    logger.fine('media.id--${_media.id}');
     return SliverAppBar(
         expandedHeight: 240.0,
         pinned: true,
@@ -51,14 +56,14 @@ class MediaDetailPage extends StatelessWidget {
             fit: StackFit.expand,
             children: <Widget>[
               Hero(
-                  tag: 'media_tag_${media.id}',
+                  tag: 'media_tag_${_media.id}',
                   child: StreamBuilder(
                     stream: mediaBloc.mediaDetail,
                     builder: (BuildContext ctx,
                             AsyncSnapshot<MediaDetail> snapshot) =>
-                        media.backdropPath == null ||
+                        _media.backdropPath == null ||
                                 snapshot.data == null ||
-                                media.backdropPath == null
+                                _media.backdropPath == null
                             ? Image.asset(
                                 'assets/images/placeholder.jpg',
                                 fit: BoxFit.cover,
@@ -68,7 +73,7 @@ class MediaDetailPage extends StatelessWidget {
                                 fit: BoxFit.cover,
                                 placeholder: 'assets/images/placeholder.jpg',
                                 width: double.infinity,
-                                image: media.backdropPath ??
+                                image: _media.backdropPath ??
                                     snapshot.data.backdropPath,
                               ),
                   )),
@@ -96,14 +101,14 @@ class MediaDetailPage extends StatelessWidget {
               Row(
                 children: <Widget>[
                   TextBubble(
-                    media.releaseDate.year.toString(),
+                    _media.releaseDate.year.toString(),
                     backgroundColor: tagBgColor,
                   ),
                   Container(
                     width: 8.0,
                   ),
                   TextBubble(
-                    media.voteAverage.toString(),
+                    _media.voteAverage.toString(),
                     backgroundColor: tagBgColor,
                   ),
                 ],
@@ -111,12 +116,12 @@ class MediaDetailPage extends StatelessWidget {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
-                  media.title,
+                  _media.title,
                   style: TextStyle(color: Color(0xFFEEEEEE), fontSize: 20.0),
                 ),
               ),
               Row(
-                children: getGenresForIds(media.genreIds, ctx)
+                children: getGenresForIds(_media.genreIds, ctx)
                     .map((text) => Row(
                           children: <Widget>[
                             TextBubble(text),
@@ -133,9 +138,6 @@ class MediaDetailPage extends StatelessWidget {
       );
 
   Widget _buildContent(BuildContext ctx) {
-    mediaBloc.getCastListAction(media.id);
-    mediaBloc.getMediaDetailAction(media.id);
-    mediaBloc.getSimilarListAction(media.id);
     return SliverList(
       delegate: SliverChildListDelegate(
         <Widget>[
@@ -154,7 +156,7 @@ class MediaDetailPage extends StatelessWidget {
                     height: 8.0,
                   ),
                   Text(
-                    media.overview,
+                    _media.overview,
                     style: Theme.of(ctx)
                         .textTheme
                         .subhead
