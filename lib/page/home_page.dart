@@ -4,6 +4,7 @@ import 'package:cinematic_flutter/model/app_state.dart';
 import 'package:cinematic_flutter/model/media_type.dart';
 import 'package:cinematic_flutter/provider/app_state_provider.dart';
 import 'package:cinematic_flutter/provider/media_provider.dart';
+import 'package:cinematic_flutter/util/api_client.dart';
 import 'package:cinematic_flutter/widget/app_tab_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:cinematic_flutter/widget/media_list.dart';
@@ -131,7 +132,7 @@ class HomePage extends StatelessWidget {
             break;
           case MOVIES_KEY:
             {
-              mediaBloc.mediaType = MediaType.movie;
+              ApiClient().mediaType = MediaType.movie;
               appState.onMediaTypeSelectedAction(MediaType.movie);
               mediaBloc.getMediaListAction(len: -1);
               Navigator.pop(ctx);
@@ -139,7 +140,7 @@ class HomePage extends StatelessWidget {
             break;
           case TV_SHOWS_KEY:
             {
-              mediaBloc.mediaType = MediaType.tv;
+              ApiClient().mediaType = MediaType.tv;
               appState.onMediaTypeSelectedAction(MediaType.tv);
               mediaBloc.getMediaListAction(len: -1);
               Navigator.pop(ctx);

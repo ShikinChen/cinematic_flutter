@@ -194,5 +194,85 @@
   "@synopsis": {
     "type": "text",
     "placeholders": {}
+  },
+  "cast": "阵容",
+  "@cast": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "about": "关于",
+  "@about": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "originalTitle": "原标题",
+  "@originalTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "status": "状态",
+  "@status": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "runtime": "时长",
+  "@runtime": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "type": "类型",
+  "@type": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "creators": "作者",
+  "@creators": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "networks": "Networks",
+  "@networks": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "seasons": "季度",
+  "@seasons": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "premiere": "首映",
+  "@premiere": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "latest_next_episode": "最新/下一集",
+  "@latest_next_episode": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "budget": "预算",
+  "@budget": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "revenue": "收益",
+  "@revenue": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "homepage": "首页",
+  "@homepage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "imdb": "Imdb",
+  "@imdb": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "similar": "推荐",
+  "@similar": {
+    "type": "text",
+    "placeholders": {}
   }
 }

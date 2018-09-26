@@ -25,13 +25,20 @@ class CastCard extends StatelessWidget {
             children: <Widget>[
               Hero(
                 tag: 'cast_tag_${cast.id}',
-                child: FadeInImage.assetNetwork(
-                  placeholder: 'assets/images/placeholder.jpg',
-                  image: cast.profilePath,
-                  fit: BoxFit.cover,
-                  height: height,
-                  width: width,
-                ),
+                child: cast.profilePath == null
+                    ? Image.asset(
+                        'assets/images/placeholder.jpg',
+                        fit: BoxFit.cover,
+                        height: height,
+                        width: width,
+                      )
+                    : FadeInImage.assetNetwork(
+                        placeholder: 'assets/images/placeholder.jpg',
+                        image: cast.profilePath,
+                        fit: BoxFit.cover,
+                        height: height,
+                        width: width,
+                      ),
               ),
               BottomGradient.noOffset(),
               Padding(

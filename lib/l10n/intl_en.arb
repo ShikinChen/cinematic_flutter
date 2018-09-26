@@ -194,5 +194,85 @@
   "@synopsis": {
     "type": "text",
     "placeholders": {}
+  },
+  "cast": "Cast",
+  "@cast": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "about": "About",
+  "@about": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "originalTitle": "Original Title",
+  "@originalTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "status": "Status",
+  "@status": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "runtime": "Runtime",
+  "@runtime": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "type": "Type",
+  "@type": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "creators": "Creators",
+  "@creators": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "networks": "Networks",
+  "@networks": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "seasons": "Seasons",
+  "@seasons": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "premiere": "Premiere",
+  "@premiere": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "latest_next_episode": "Latest/Next Episode",
+  "@latest_next_episode": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "budget": "Budget",
+  "@budget": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "revenue": "Revenue",
+  "@revenue": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "homepage": "Homepage",
+  "@homepage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "imdb": "Imdb",
+  "@imdb": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "similar": "Similar",
+  "@similar": {
+    "type": "text",
+    "placeholders": {}
   }
 }

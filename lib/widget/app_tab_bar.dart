@@ -23,8 +23,8 @@ class AppTabBar extends StatelessWidget {
             onTap: (int index) {
               appStateBloc.onTabSelectedAction(index);
               if (appState.mediaType != MediaType.movie && index == 1) {
-                logger.fine(
-                    'mediaBloc.mediaType--${mediaBloc.mediaType}__index--${index}');
+//                logger.fine(
+//                    'mediaBloc.mediaType--${mediaBloc.mediaType}__index--${index}');
                 mediaBloc.mediaCategory = MediaCategory.on_the_air;
               } else {
                 mediaBloc.mediaCategory = MediaCategory.values[index];

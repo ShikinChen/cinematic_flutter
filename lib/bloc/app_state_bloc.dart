@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:cinematic_flutter/constants.dart';
-import 'package:cinematic_flutter/model/app_load_state.dart';
 import 'package:cinematic_flutter/model/app_locale.dart';
 import 'package:cinematic_flutter/model/app_state.dart';
 import 'package:cinematic_flutter/model/app_theme.dart';
@@ -9,7 +8,6 @@ import 'package:cinematic_flutter/model/genre.dart';
 import 'package:cinematic_flutter/model/media_type.dart';
 import 'package:cinematic_flutter/util/api_client.dart';
 import 'package:logging/logging.dart';
-import 'package:cinematic_flutter/actions/actions.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,8 +18,6 @@ class AppStateBloc {
   VoidCallback _loadLocaleFunc;
   final Logger logger = Logger('AppStateBloc');
 
-//  final PublishSubject<dynamic> _loadSettingController =
-//      PublishSubject<dynamic>();
   final PublishSubject<int> _toggleThemeController = PublishSubject<int>();
   final PublishSubject<AppLocale> _loadLocaleController =
       PublishSubject<AppLocale>();
@@ -47,12 +43,10 @@ class AppStateBloc {
       _onMediaTypeSelectedController.sink;
 
   AppStateBloc() {
-//    _loadSettingController.stream.listen(loadSettingAction);
     _toggleThemeController.stream.listen(_toggleTheme);
     _loadLocaleController.stream.listen(_loadLocale);
     _onTabSelectedController.stream.listen(_onTabSelected);
     _onMediaTypeSelectedController.stream.listen(_onMediaTypeSelected);
-//    _getGenreController.stream.listen(_getGenre);
   }
 
   Future<AppState> loadSettingAction() async {

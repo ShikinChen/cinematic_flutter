@@ -1,9 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cinematic_flutter/model/cast.dart';
+import 'package:cinematic_flutter/model/credits_res.dart';
 import 'package:cinematic_flutter/model/genre.dart';
 import 'package:cinematic_flutter/model/genre_list_res.dart';
+import 'package:cinematic_flutter/model/media.dart';
+import 'package:cinematic_flutter/model/media_detail.dart';
 import 'package:cinematic_flutter/model/media_type.dart';
+import 'package:cinematic_flutter/model/similar_res.dart';
 import 'package:flutter/material.dart';
 import 'package:cinematic_flutter/model/media_category.dart';
 import 'package:dio/dio.dart';
@@ -21,6 +26,7 @@ class ApiClient {
     receiveTimeout: 3000,
   ));
   String language;
+  MediaType mediaType = MediaType.movie;
 
   factory ApiClient() {
     _singleton._dio.interceptor.request.onSend = (Options options) {
@@ -62,9 +68,7 @@ class ApiClient {
   ApiClient._internal();
 
   Future<MediaListRes> getMovieList(
-      {@required MediaType mediaType,
-      @required MediaCategory mediaCategory,
-      int len = 1}) {
+      {@required MediaCategory mediaCategory, int len = 1}) {
     String mediaTypeText = getMediaTypeName(mediaType);
     String mediaCategoryText = getMediaCategoryName(mediaCategory);
     return _dio.get(
@@ -86,6 +90,43 @@ class ApiClient {
     }).then((res) {
       if (res.statusCode == 200) {
         return GenreListRes.fromJson(res.data).genres;
+      } else {
+        return List();
+      }
+    });
+  }
+
+  Future<List<Cast>> getCredits({@required int id}) {
+    return _dio.get("/${getMediaTypeName(mediaType)}/${id}/credits", data: {
+      'language': language,
+    }).then((res) {
+      if (res.statusCode == 200) {
+        return CreditsRes.fromJson(res.data).cast;
+      } else {
+        return List();
+      }
+    });
+  }
+
+  Future<MediaDetail> getMediaDetail({@required int id}) {
+    return _dio.get("/${getMediaTypeName(mediaType)}/${id}", data: {
+      'language': language,
+    }).then((res) {
+      if (res.statusCode == 200) {
+        return MediaDetail.fromJson(res.data);
+      } else {
+        return MediaDetail();
+      }
+    });
+  }
+
+  Future<List<Media>> getSimilarList({@required int id, int page: 1}) {
+    return _dio.get("/${getMediaTypeName(mediaType)}/${id}/similar", data: {
+      'page': page,
+      'language': language,
+    }).then((res) {
+      if (res.statusCode == 200) {
+        return SimilarRes.fromJson(res.data).results;
       } else {
         return List();
       }
