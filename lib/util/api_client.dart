@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cinematic_flutter/model/genre.dart';
+import 'package:cinematic_flutter/model/genre_list_res.dart';
 import 'package:cinematic_flutter/model/media_type.dart';
 import 'package:flutter/material.dart';
 import 'package:cinematic_flutter/model/media_category.dart';
@@ -26,6 +28,7 @@ class ApiClient {
         'api_key': API_KEY,
         'language': _singleton.language,
       };
+      options.data = options.data ?? Map();
       if (options.data != null) {
         data.addAll(options.data);
       }
@@ -62,9 +65,8 @@ class ApiClient {
       {@required MediaType mediaType,
       @required MediaCategory mediaCategory,
       int len = 1}) {
-    String mediaTypeText = mediaType.toString().replaceAll('MediaType.', '');
-    String mediaCategoryText =
-        mediaCategory.toString().replaceAll('MediaCategory.', '');
+    String mediaTypeText = getMediaTypeName(mediaType);
+    String mediaCategoryText = getMediaCategoryName(mediaCategory);
     return _dio.get(
       "/${mediaTypeText}/${mediaCategoryText}",
       data: {'page': getPage(len)},
@@ -73,6 +75,19 @@ class ApiClient {
         return MediaListRes.fromJson(res.data);
       } else {
         return MediaListRes();
+      }
+    });
+  }
+
+  Future<List<Genre>> getGenreList(
+      {@required MediaType mediaType, @required String language}) {
+    return _dio.get("/genre/${getMediaTypeName(mediaType)}/list", data: {
+      'language': language,
+    }).then((res) {
+      if (res.statusCode == 200) {
+        return GenreListRes.fromJson(res.data).genres;
+      } else {
+        return List();
       }
     });
   }

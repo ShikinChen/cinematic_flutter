@@ -17,6 +17,8 @@ class AppState {
   AppLocale currentLocale;
   AppLoadState loadSettingState = AppLoadState.notLoaded;
 
+  bool isLoadGenre = false;
+
   dynamic data;
 
   factory AppState.init() => AppState(

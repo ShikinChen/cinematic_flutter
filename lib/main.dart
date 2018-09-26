@@ -2,6 +2,7 @@ import 'package:cinematic_flutter/bloc/media_bloc.dart';
 import 'package:cinematic_flutter/model/app_load_state.dart';
 import 'package:cinematic_flutter/model/app_theme.dart';
 import 'package:cinematic_flutter/page/media_detail_page.dart';
+import 'package:cinematic_flutter/page/splash_page.dart';
 import 'package:cinematic_flutter/provider/app_state_provider.dart';
 import 'package:cinematic_flutter/provider/media_provider.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +30,12 @@ class App extends StatelessWidget {
   final MediaBloc mediaBloc = MediaBloc();
 
   App() {
-    appStateBloc.loadSettingAction(() {
-      mediaBloc.getMediaListAction();
+    appStateBloc
+        .loadSettingAction()
+        .then((appState) => appStateBloc.getGenreAction(appState))
+        .then((appState) {
+      appStateBloc.appStateSubject.add(appState);
+      mediaBloc.getMediaListAction(len: -1);
     });
   }
 
@@ -54,7 +59,7 @@ class App extends StatelessWidget {
                     GlobalMaterialLocalizations.delegate,
                     GlobalWidgetsLocalizations.delegate,
                   ],
-                  home: homePage,
+                  home: snapshot.data.isLoadGenre ? homePage : SplashPage(),
                 ),
           ),
         ),
