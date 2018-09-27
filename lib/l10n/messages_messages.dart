@@ -17,6 +17,8 @@ typedef MessageIfAbsent(String message_str, List args);
 class MessageLookup extends MessageLookupByLibrary {
   get localeName => 'messages';
 
+  static m0(numberOfSeasons, numberOfEpisodes) => "${numberOfSeasons} Seasons and ${numberOfEpisodes} Episodes";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "about" : MessageLookupByLibrary.simpleMessage("About"),
@@ -59,6 +61,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "scienceFiction" : MessageLookupByLibrary.simpleMessage("Science Fiction"),
     "search" : MessageLookupByLibrary.simpleMessage("Search"),
     "seasons" : MessageLookupByLibrary.simpleMessage("Seasons"),
+    "seasonsEpisodes" : m0,
     "similar" : MessageLookupByLibrary.simpleMessage("Similar"),
     "simplifiedChinese" : MessageLookupByLibrary.simpleMessage("Simplified Chinese"),
     "soap" : MessageLookupByLibrary.simpleMessage("Soap"),

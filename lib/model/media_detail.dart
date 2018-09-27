@@ -1,5 +1,7 @@
+import 'package:cinematic_flutter/model/creator.dart';
 import 'package:cinematic_flutter/model/genre.dart';
 import 'package:cinematic_flutter/model/media.dart';
+import 'package:cinematic_flutter/model/network.dart';
 import 'package:cinematic_flutter/model/production_countrie.dart';
 import 'package:cinematic_flutter/model/spoken_language.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -32,6 +34,17 @@ class MediaDetail extends Media {
   String homepage;
   @JsonKey(name: 'imdb_id')
   String imdbId;
+
+  @JsonKey(name: 'created_by')
+  List<Creator> creator;
+
+  @JsonKey(name: 'networks')
+  List<Network> networks;
+
+  @JsonKey(name: 'number_of_seasons')
+  int numberOfSeasons;
+  @JsonKey(name: 'number_of_episodes')
+  int numberOfEpisodes;
 
   MediaDetail();
 

@@ -18,7 +18,7 @@ class TextBubble extends StatelessWidget {
             vertical: 4.0,
           ),
           child: Text(
-            text,
+            text??'',
             style: TextStyle(
               color: textColor,
               fontSize: 12.0,

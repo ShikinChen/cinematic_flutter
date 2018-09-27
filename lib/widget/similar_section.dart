@@ -27,12 +27,18 @@ class SimilarSection extends StatelessWidget {
               children: list
                   .map((media) => GestureDetector(
                         onTap: () => goToMediaDetail(context, media),
-                        child: FadeInImage.assetNetwork(
-                          placeholder: 'assets/images/placeholder.jpg',
-                          image: media.posterPath,
-                          height: 150.0,
-                          fit: BoxFit.cover,
-                        ),
+                        child: media.posterPath == null
+                            ? Image.asset(
+                                'assets/images/placeholder.jpg',
+                                height: 150.0,
+                                fit: BoxFit.cover,
+                              )
+                            : FadeInImage.assetNetwork(
+                                placeholder: 'assets/images/placeholder.jpg',
+                                image: media.posterPath,
+                                height: 150.0,
+                                fit: BoxFit.cover,
+                              ),
                       ))
                   .toList(),
             ),

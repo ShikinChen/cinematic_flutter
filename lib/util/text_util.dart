@@ -58,9 +58,12 @@ String getGenreString(List<int> genreIds, BuildContext ctx) {
 }
 
 String formatRuntime(int runtime) {
-  int hours = runtime ~/ 60;
-  int minutes = runtime % 60;
-  return '$hours\h $minutes\m';
+  if (runtime != null) {
+    int hours = runtime ~/ 60;
+    int minutes = runtime % 60;
+    return '$hours\h $minutes\m';
+  }
+  return '';
 }
 
 String formatDate(DateTime dateTime) {
@@ -71,4 +74,5 @@ String formatDate(DateTime dateTime) {
   }
 }
 
-String formatNumberToDollars(int amount) => '\$${dollarFormat.format(amount)}';
+String formatNumberToDollars(int amount) =>
+    amount == null ? '' : '\$${dollarFormat.format(amount)}';

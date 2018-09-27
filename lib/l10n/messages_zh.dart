@@ -17,6 +17,8 @@ typedef MessageIfAbsent(String message_str, List args);
 class MessageLookup extends MessageLookupByLibrary {
   get localeName => 'zh';
 
+  static m0(numberOfSeasons, numberOfEpisodes) => "${numberOfSeasons} 季度 和 ${numberOfEpisodes} 集";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "about" : MessageLookupByLibrary.simpleMessage("关于"),
@@ -46,7 +48,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "movies" : MessageLookupByLibrary.simpleMessage("电影"),
     "music" : MessageLookupByLibrary.simpleMessage("音乐"),
     "mystery" : MessageLookupByLibrary.simpleMessage("神秘"),
-    "networks" : MessageLookupByLibrary.simpleMessage("Networks"),
+    "networks" : MessageLookupByLibrary.simpleMessage("播放频道"),
     "onTheAir" : MessageLookupByLibrary.simpleMessage("播放中"),
     "originalTitle" : MessageLookupByLibrary.simpleMessage("原标题"),
     "popular" : MessageLookupByLibrary.simpleMessage("流行"),
@@ -59,6 +61,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "scienceFiction" : MessageLookupByLibrary.simpleMessage("科幻"),
     "search" : MessageLookupByLibrary.simpleMessage("搜索"),
     "seasons" : MessageLookupByLibrary.simpleMessage("季度"),
+    "seasonsEpisodes" : m0,
     "similar" : MessageLookupByLibrary.simpleMessage("推荐"),
     "simplifiedChinese" : MessageLookupByLibrary.simpleMessage("简体中文"),
     "soap" : MessageLookupByLibrary.simpleMessage("肥皂剧"),

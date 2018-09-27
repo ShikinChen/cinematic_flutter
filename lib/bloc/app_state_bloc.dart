@@ -66,10 +66,6 @@ class AppStateBloc {
     }
 
     return _appState;
-//    _appStateSubject.add(_appState);
-//    if (_loadLocaleFunc != null) {
-//      _loadLocaleFunc();
-//    }
   }
 
   void _toggleTheme(int currentTheme) async {
@@ -109,7 +105,7 @@ class AppStateBloc {
       });
 
       List<Genre> enTvGenreListRes = await ApiClient().getGenreList(
-          mediaType: MediaType.movie,
+          mediaType: MediaType.tv,
           language: AppLocalizations.EN_LOCALE.language);
 
       enTvGenreListRes.forEach((item) {
@@ -126,7 +122,7 @@ class AppStateBloc {
       });
 
       List<Genre> cnTvGenreListRes = await ApiClient().getGenreList(
-          mediaType: MediaType.movie,
+          mediaType: MediaType.tv,
           language: AppLocalizations.ZH_LOCALE.language);
 
       cnTvGenreListRes.forEach((item) {

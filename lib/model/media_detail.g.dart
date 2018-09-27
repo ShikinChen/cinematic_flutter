@@ -58,7 +58,17 @@ MediaDetail _$MediaDetailFromJson(Map<String, dynamic> json) {
     ..tagline = json['tagline'] as String
     ..originalName = json['original_name'] as String
     ..homepage = json['homepage'] as String
-    ..imdbId = json['imdb_id'] as String;
+    ..imdbId = json['imdb_id'] as String
+    ..creator = (json['created_by'] as List)
+        ?.map((e) =>
+            e == null ? null : Creator.fromJson(e as Map<String, dynamic>))
+        ?.toList()
+    ..networks = (json['networks'] as List)
+        ?.map((e) =>
+            e == null ? null : Network.fromJson(e as Map<String, dynamic>))
+        ?.toList()
+    ..numberOfSeasons = json['number_of_seasons'] as int
+    ..numberOfEpisodes = json['number_of_episodes'] as int;
 }
 
 Map<String, dynamic> _$MediaDetailToJson(MediaDetail instance) =>
@@ -91,5 +101,9 @@ Map<String, dynamic> _$MediaDetailToJson(MediaDetail instance) =>
       'tagline': instance.tagline,
       'original_name': instance.originalName,
       'homepage': instance.homepage,
-      'imdb_id': instance.imdbId
+      'imdb_id': instance.imdbId,
+      'created_by': instance.creator,
+      'networks': instance.networks,
+      'number_of_seasons': instance.numberOfSeasons,
+      'number_of_episodes': instance.numberOfEpisodes
     };

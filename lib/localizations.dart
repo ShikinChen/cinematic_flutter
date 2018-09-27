@@ -382,6 +382,13 @@ class AppLocalizations {
         name: 'similar',
         args: [],
       );
+
+  String seasonsEpisodes(int numberOfSeasons, int numberOfEpisodes) =>
+      Intl.message(
+        '$numberOfSeasons Seasons and $numberOfEpisodes Episodes',
+        name: 'seasonsEpisodes',
+        args: [numberOfSeasons, numberOfEpisodes],
+      );
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

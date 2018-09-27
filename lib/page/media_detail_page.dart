@@ -1,8 +1,12 @@
+import 'package:cinematic_flutter/bloc/app_state_bloc.dart';
+import 'package:cinematic_flutter/model/app_state.dart';
 import 'package:cinematic_flutter/model/cast.dart';
 import 'package:cinematic_flutter/model/media.dart';
 import 'package:cinematic_flutter/model/media_detail.dart';
 import 'package:cinematic_flutter/bloc/media_bloc.dart';
+import 'package:cinematic_flutter/provider/app_state_provider.dart';
 import 'package:cinematic_flutter/provider/media_provider.dart';
+import 'package:cinematic_flutter/util/api_client.dart';
 import 'package:cinematic_flutter/widget/bottom_gradient.dart';
 import 'package:cinematic_flutter/widget/cast_section.dart';
 import 'package:cinematic_flutter/widget/meta_section.dart';
@@ -13,6 +17,7 @@ import 'package:cinematic_flutter/constants.dart';
 import 'package:cinematic_flutter/util/text_util.dart';
 import 'package:cinematic_flutter/widget/similar_section.dart';
 import 'package:logging/logging.dart';
+import 'package:cinematic_flutter/model/media_type.dart';
 
 class MediaDetailPage extends StatelessWidget {
   Media _media;
@@ -24,6 +29,7 @@ class MediaDetailPage extends StatelessWidget {
     mediaBloc.getCastListAction(media.id);
     mediaBloc.getMediaDetailAction(media.id);
     mediaBloc.getSimilarListAction(media.id);
+    mediaBloc.getCollectAction(media.id);
   }
 
   final tagBgColor = Color(0xffF47663);
@@ -40,48 +46,57 @@ class MediaDetailPage extends StatelessWidget {
 
   Widget _buildAppBar(BuildContext ctx) {
     logger.fine('media.id--${_media.id}');
-    return SliverAppBar(
-        expandedHeight: 240.0,
-        pinned: true,
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.favorite_border,
-            ),
-          ),
-        ],
-        flexibleSpace: FlexibleSpaceBar(
-          background: Stack(
-            fit: StackFit.expand,
-            children: <Widget>[
-              Hero(
-                  tag: 'media_tag_${_media.id}',
-                  child: StreamBuilder(
-                    stream: mediaBloc.mediaDetail,
-                    builder: (BuildContext ctx,
-                            AsyncSnapshot<MediaDetail> snapshot) =>
-                        _media.backdropPath == null ||
-                                snapshot.data == null ||
-                                _media.backdropPath == null
-                            ? Image.asset(
-                                'assets/images/placeholder.jpg',
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                              )
-                            : FadeInImage.assetNetwork(
-                                fit: BoxFit.cover,
-                                placeholder: 'assets/images/placeholder.jpg',
-                                width: double.infinity,
-                                image: _media.backdropPath ??
-                                    snapshot.data.backdropPath,
-                              ),
-                  )),
-              BottomGradient(),
-              _buildMeta(ctx),
-            ],
-          ),
-        ));
+    return StreamBuilder(
+      stream: mediaBloc.collect,
+      initialData: false,
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) =>
+          SliverAppBar(
+              expandedHeight: 240.0,
+              pinned: true,
+              actions: <Widget>[
+                IconButton(
+                  onPressed: () {
+                    mediaBloc.saveCollectAction(_media.id);
+                  },
+                  icon: Icon(
+                    snapshot.data ? Icons.favorite : Icons.favorite_border,
+                    color: snapshot.data ? Colors.redAccent : Colors.white,
+                  ),
+                ),
+              ],
+              flexibleSpace: FlexibleSpaceBar(
+                background: Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    Hero(
+                        tag: 'media_tag_${_media.id}',
+                        child: StreamBuilder(
+                          stream: mediaBloc.mediaDetail,
+                          builder: (BuildContext ctx,
+                                  AsyncSnapshot<MediaDetail> snapshot) =>
+                              _media.backdropPath == null ||
+                                      snapshot.data == null ||
+                                      _media.backdropPath == null
+                                  ? Image.asset(
+                                      'assets/images/placeholder.jpg',
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                    )
+                                  : FadeInImage.assetNetwork(
+                                      fit: BoxFit.cover,
+                                      placeholder:
+                                          'assets/images/placeholder.jpg',
+                                      width: double.infinity,
+                                      image: _media.backdropPath ??
+                                          snapshot.data.backdropPath,
+                                    ),
+                        )),
+                    BottomGradient(),
+                    _buildMeta(ctx),
+                  ],
+                ),
+              )),
+    );
   }
 
   Widget _buildMeta(BuildContext ctx) => AnimatedOpacity(
@@ -101,7 +116,11 @@ class MediaDetailPage extends StatelessWidget {
               Row(
                 children: <Widget>[
                   TextBubble(
-                    _media.releaseDate.year.toString(),
+                    (_media.releaseDate != null
+                            ? _media.releaseDate
+                            : _media.firstAirDate)
+                        .year
+                        .toString(),
                     backgroundColor: tagBgColor,
                   ),
                   Container(
@@ -116,7 +135,7 @@ class MediaDetailPage extends StatelessWidget {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
-                  _media.title,
+                  _media.title ?? _media.name,
                   style: TextStyle(color: Color(0xFFEEEEEE), fontSize: 20.0),
                 ),
               ),
@@ -156,7 +175,7 @@ class MediaDetailPage extends StatelessWidget {
                     height: 8.0,
                   ),
                   Text(
-                    _media.overview,
+                    _media.overview ?? '',
                     style: Theme.of(ctx)
                         .textTheme
                         .subhead

@@ -1,18 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:cinematic_flutter/constants.dart';
-import 'package:cinematic_flutter/model/app_state.dart';
 import 'package:cinematic_flutter/model/cast.dart';
 import 'package:cinematic_flutter/model/media.dart';
 import 'package:cinematic_flutter/model/media_category.dart';
 import 'package:cinematic_flutter/model/media_detail.dart';
 import 'package:cinematic_flutter/model/media_list_res.dart';
-import 'package:cinematic_flutter/model/media_type.dart';
 import 'package:cinematic_flutter/util/api_client.dart';
-import 'package:cinematic_flutter/util/date_time_util.dart';
-import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:logging/logging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MediaBloc {
   final Logger logger = Logger('MediaBloc');
@@ -20,6 +18,8 @@ class MediaBloc {
   final PublishSubject<int> _castController = PublishSubject<int>();
   final PublishSubject<int> _mediaDetailController = PublishSubject<int>();
   final PublishSubject<int> _similarListController = PublishSubject<int>();
+  final PublishSubject<int> _saveCollectController = PublishSubject<int>();
+  final PublishSubject<int> _getCollectController = PublishSubject<int>();
   final BehaviorSubject<MediaListState> _mediaListSubject =
       BehaviorSubject<MediaListState>();
   final BehaviorSubject<List<Cast>> _castListSubject =
@@ -30,6 +30,8 @@ class MediaBloc {
 
   final BehaviorSubject<List<Media>> _similarListSubject =
       BehaviorSubject<List<Media>>();
+
+  final BehaviorSubject<bool> _collectSubject = BehaviorSubject<bool>();
 
   final MediaListState mediaListState = MediaListState();
 
@@ -43,6 +45,8 @@ class MediaBloc {
 
   Stream<List<Media>> get similarList => _similarListSubject.stream;
 
+  Stream<bool> get collect => _collectSubject.stream;
+
   Sink<int> get page => _pageController.sink;
 
   Sink<int> get castListFromId => _castController.sink;
@@ -51,11 +55,51 @@ class MediaBloc {
 
   Sink<int> get similarListFromId => _similarListController.sink;
 
+  Sink<int> get saveCollect => _saveCollectController.sink;
+
+  Sink<int> get getCollect => _getCollectController.sink;
+
   MediaBloc() {
     _pageController.stream.listen(getMediaList);
     _castController.stream.listen(_getCredits);
     _mediaDetailController.stream.listen(_getMediaDetail);
     _similarListController.stream.listen(_getSimilarList);
+    _saveCollectController.stream.listen(_saveCollect);
+    _getCollectController.stream.listen(_getCollect);
+  }
+
+  void _getCollect(int id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String jsonText = await prefs.get(COLLECT_LIST_KEY);
+    List<dynamic> list;
+    if (jsonText != null) {
+      list = JsonDecoder().convert(jsonText);
+      _collectSubject.add(list.contains(id));
+    } else {
+      _collectSubject.add(false);
+    }
+  }
+
+  void _saveCollect(int id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String jsonText = await prefs.get(COLLECT_LIST_KEY);
+    List<dynamic> list;
+    if (jsonText == null) {
+      list = List();
+    } else {
+      list = JsonDecoder().convert(jsonText);
+    }
+    if (!list.contains(id)) {
+      list.add(id);
+    } else {
+      list.remove(id);
+    }
+
+    bool isSuccess =
+        await prefs.setString(COLLECT_LIST_KEY, JsonEncoder().convert(list));
+    if (isSuccess) {
+      _collectSubject.add(list.contains(id));
+    }
   }
 
   void _getCredits(int id) async {
@@ -126,6 +170,14 @@ class MediaBloc {
 
   void getSimilarListAction(int id) {
     this.similarListFromId.add(id);
+  }
+
+  void getCollectAction(int id) {
+    this.getCollect.add(id);
+  }
+
+  void saveCollectAction(int id) {
+    this.saveCollect.add(id);
   }
 }
 

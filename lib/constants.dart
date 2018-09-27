@@ -20,3 +20,5 @@ const String LANGUAGE_KEY = 'language';
 const String APP_THEME_KEY = 'app_theme';
 
 const String APP_LOCALE_KEY = 'app_locale';
+
+const String COLLECT_LIST_KEY = 'collect_list';
