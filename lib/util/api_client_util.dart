@@ -16,19 +16,19 @@ import 'package:cinematic_flutter/constants.dart';
 import 'package:cinematic_flutter/model/media_list_res.dart';
 import 'package:logging/logging.dart';
 
-class ApiClient {
+class ApiClientUtil {
   final paging = 20;
   final Logger logger = Logger('ApiClient');
-  static final ApiClient _singleton = new ApiClient._internal();
+  static final ApiClientUtil _singleton = new ApiClientUtil._internal();
   final Dio _dio = Dio(new Options(
     baseUrl: "http://api.themoviedb.org/3",
-    connectTimeout: 10000,
-    receiveTimeout: 3000,
+    connectTimeout: 30000,
+    receiveTimeout: 30000,
   ));
   String language;
   MediaType mediaType = MediaType.movie;
 
-  factory ApiClient() {
+  factory ApiClientUtil() {
     _singleton._dio.interceptor.request.onSend = (Options options) {
       Map<String, dynamic> data = {
         'api_key': API_KEY,
@@ -65,7 +65,7 @@ class ApiClient {
 
   Dio get dio => _dio;
 
-  ApiClient._internal();
+  ApiClientUtil._internal();
 
   Future<MediaListRes> getMovieList(
       {@required MediaCategory mediaCategory, int len = 1}) {
@@ -96,8 +96,12 @@ class ApiClient {
     });
   }
 
-  Future<List<Cast>> getCredits({@required int id}) {
-    return _dio.get("/${getMediaTypeName(mediaType)}/${id}/credits", data: {
+  Future<List<Cast>> getCredits(
+      {@required String mediaType, @required int id}) {
+    if (mediaType == null) {
+      mediaType = getMediaTypeName(this.mediaType);
+    }
+    return _dio.get("/${mediaType}/${id}/credits", data: {
       'language': language,
     }).then((res) {
       if (res.statusCode == 200) {
@@ -108,8 +112,13 @@ class ApiClient {
     });
   }
 
-  Future<MediaDetail> getMediaDetail({@required int id}) {
-    return _dio.get("/${getMediaTypeName(mediaType)}/${id}", data: {
+  Future<MediaDetail> getMediaDetail(
+      {@required String mediaType, @required int id}) {
+    logger.fine('getMediaDetail--mediaType--${mediaType}');
+    if (mediaType == null) {
+      mediaType = getMediaTypeName(this.mediaType);
+    }
+    return _dio.get("/${mediaType}/${id}", data: {
       'language': language,
     }).then((res) {
       if (res.statusCode == 200) {
@@ -120,8 +129,12 @@ class ApiClient {
     });
   }
 
-  Future<List<Media>> getSimilarList({@required int id, int page: 1}) {
-    return _dio.get("/${getMediaTypeName(mediaType)}/${id}/similar", data: {
+  Future<List<Media>> getSimilarList(
+      {@required String mediaType, @required int id, int page: 1}) {
+    if (mediaType == null) {
+      mediaType = getMediaTypeName(this.mediaType);
+    }
+    return _dio.get("/${mediaType}/${id}/similar", data: {
       'page': page,
       'language': language,
     }).then((res) {

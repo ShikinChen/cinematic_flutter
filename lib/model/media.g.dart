@@ -27,7 +27,9 @@ Media _$MediaFromJson(Map<String, dynamic> json) {
         : toDateTime(json['release_date'] as String)
     ..firstAirDate = json['first_air_date'] == null
         ? null
-        : toDateTime(json['first_air_date'] as String);
+        : toDateTime(json['first_air_date'] as String)
+    ..genreIdsJson = json['genreIdsJson'] as String
+    ..mediaType = json['mediaType'] as String;
 }
 
 Map<String, dynamic> _$MediaToJson(Media instance) => <String, dynamic>{
@@ -46,5 +48,7 @@ Map<String, dynamic> _$MediaToJson(Media instance) => <String, dynamic>{
       'adult': instance.adult,
       'overview': instance.overview,
       'release_date': instance.releaseDate?.toIso8601String(),
-      'first_air_date': instance.firstAirDate?.toIso8601String()
+      'first_air_date': instance.firstAirDate?.toIso8601String(),
+      'genreIdsJson': instance.genreIdsJson,
+      'mediaType': instance.mediaType
     };

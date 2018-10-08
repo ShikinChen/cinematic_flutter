@@ -1,7 +1,7 @@
 import 'package:cinematic_flutter/localizations.dart';
 import 'package:cinematic_flutter/model/media_detail.dart';
 import 'package:cinematic_flutter/model/media_type.dart';
-import 'package:cinematic_flutter/util/api_client.dart';
+import 'package:cinematic_flutter/util/api_client_util.dart';
 import 'package:flutter/material.dart';
 import 'package:cinematic_flutter/util/text_util.dart';
 
@@ -19,7 +19,7 @@ class MetaSection extends StatelessWidget {
   }
 
   List<Widget> _buildInfo(BuildContext context) {
-    final MediaType mediaType = ApiClient().mediaType;
+    final MediaType mediaType = ApiClientUtil().mediaType;
     List<Widget> list = <Widget>[
       Text(
         AppLocalizations.of(context).about,

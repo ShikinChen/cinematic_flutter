@@ -12,15 +12,19 @@ class MediaList extends StatelessWidget {
   MediaBloc _mediaBloc;
   int _len = 0;
   bool _isEnd = false;
+  bool _isCollection = false;
 
   Widget buildMediaList(BuildContext ctx, List<Media> list) {
     _mediaBloc = MediaProvider.of(ctx);
     _len = list.length;
     return RefreshIndicator(
-      onRefresh: () async => _mediaBloc.getMediaList(),
+      onRefresh: () async => _isCollection
+          ? _mediaBloc.getCollectionMediaList()
+          : _mediaBloc.getMediaList(),
       child: ListView.builder(
         controller: _scrollController,
-        itemCount: _len <= 0 && !_isEnd ? 0 : _len + 1,
+        itemCount:
+            _len <= 0 && !_isEnd ? 0 : this._isCollection ? _len : _len + 1,
         itemBuilder: (ctx, index) {
           if (index >= _len) {
             return _buildProgressIndicator();
@@ -31,9 +35,11 @@ class MediaList extends StatelessWidget {
     );
   }
 
-  MediaList() {
+  MediaList({bool isCollection: false}) {
+    this._isCollection = isCollection;
     _scrollController.addListener(() {
       if (_mediaBloc != null &&
+          !this._isCollection &&
           _scrollController.position.pixels ==
               _scrollController.position.maxScrollExtent &&
           !_isEnd) {
@@ -46,11 +52,12 @@ class MediaList extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaBloc = MediaProvider.of(context);
     return StreamBuilder<MediaListState>(
-        stream: mediaBloc.mediaList,
+        stream:
+            _isCollection ? mediaBloc.collectMediaList : mediaBloc.mediaList,
         initialData: MediaListState(),
         builder: (BuildContext ctx, AsyncSnapshot<MediaListState> snapshot) {
           List<Media> list = snapshot.data.list;
-          if (list!=null&&list.length <= 0) {
+          if (list != null && list.length <= 0) {
             _isEnd = true;
           }
           return snapshot.data.list == null

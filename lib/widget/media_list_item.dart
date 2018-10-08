@@ -88,7 +88,7 @@ class MediaListItem extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Hero(
-                tag: 'media_tag_${media.id}',
+                tag: media.tag,
                 child: media.backdropPath == null || media.posterPath == null
                     ? Image.asset('assets/images/placeholder.jpg')
                     : FadeInImage.assetNetwork(

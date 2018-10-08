@@ -1,5 +1,5 @@
 import 'package:cinematic_flutter/localizations.dart';
-import 'package:cinematic_flutter/util/api_client.dart';
+import 'package:cinematic_flutter/util/api_client_util.dart';
 import 'package:cinematic_flutter/localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -11,7 +11,7 @@ final Map<int, String> cnGenreMap = Map();
 
 Map<int, String> _genreMap(BuildContext ctx) {
   Map<int, String> map =
-      ApiClient().language == AppLocalizations.ZH_LOCALE.language
+      ApiClientUtil().language == AppLocalizations.ZH_LOCALE.language
           ? cnGenreMap
           : enGenreMap;
 

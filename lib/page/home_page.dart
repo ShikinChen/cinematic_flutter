@@ -2,9 +2,10 @@ import 'package:cinematic_flutter/bloc/app_state_bloc.dart';
 import 'package:cinematic_flutter/bloc/media_bloc.dart';
 import 'package:cinematic_flutter/model/app_state.dart';
 import 'package:cinematic_flutter/model/media_type.dart';
+import 'package:cinematic_flutter/page/collection_media_list_page.dart';
 import 'package:cinematic_flutter/provider/app_state_provider.dart';
 import 'package:cinematic_flutter/provider/media_provider.dart';
-import 'package:cinematic_flutter/util/api_client.dart';
+import 'package:cinematic_flutter/util/api_client_util.dart';
 import 'package:cinematic_flutter/widget/app_tab_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:cinematic_flutter/widget/media_list.dart';
@@ -13,6 +14,7 @@ import 'package:cinematic_flutter/localizations.dart';
 import 'package:cinematic_flutter/constants.dart';
 import 'package:cinematic_flutter/widget/language_dialog.dart';
 import 'package:logging/logging.dart';
+import 'package:cinematic_flutter/common/navigator.dart';
 
 class HomePage extends StatelessWidget {
   final int dis = 2;
@@ -128,11 +130,12 @@ class HomePage extends StatelessWidget {
           case FAVORITES_KEY:
             {
               Navigator.pop(ctx);
+              goToCollectionMediaListPage(ctx);
             }
             break;
           case MOVIES_KEY:
             {
-              ApiClient().mediaType = MediaType.movie;
+              ApiClientUtil().mediaType = MediaType.movie;
               appState.onMediaTypeSelectedAction(MediaType.movie);
               mediaBloc.getMediaListAction(len: -1);
               Navigator.pop(ctx);
@@ -140,7 +143,7 @@ class HomePage extends StatelessWidget {
             break;
           case TV_SHOWS_KEY:
             {
-              ApiClient().mediaType = MediaType.tv;
+              ApiClientUtil().mediaType = MediaType.tv;
               appState.onMediaTypeSelectedAction(MediaType.tv);
               mediaBloc.getMediaListAction(len: -1);
               Navigator.pop(ctx);

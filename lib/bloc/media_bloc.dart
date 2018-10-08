@@ -4,26 +4,37 @@ import 'dart:convert';
 import 'package:cinematic_flutter/constants.dart';
 import 'package:cinematic_flutter/model/cast.dart';
 import 'package:cinematic_flutter/model/media.dart';
+import 'package:cinematic_flutter/model/media_bean.dart';
 import 'package:cinematic_flutter/model/media_category.dart';
 import 'package:cinematic_flutter/model/media_detail.dart';
 import 'package:cinematic_flutter/model/media_list_res.dart';
-import 'package:cinematic_flutter/util/api_client.dart';
+import 'package:cinematic_flutter/util/api_client_util.dart';
+import 'package:cinematic_flutter/util/sqflite_util.dart';
+import 'package:jaguar_query_sqflite/jaguar_query_sqflite.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MediaBloc {
   final Logger logger = Logger('MediaBloc');
+
+  SqfliteAdapter _adapter;
+  MediaBean _mediaBean;
+
   final PublishSubject<int> _pageController = PublishSubject<int>();
-  final PublishSubject<int> _castController = PublishSubject<int>();
-  final PublishSubject<int> _mediaDetailController = PublishSubject<int>();
-  final PublishSubject<int> _similarListController = PublishSubject<int>();
-  final PublishSubject<int> _saveCollectController = PublishSubject<int>();
+  final PublishSubject<Media> _castController = PublishSubject<Media>();
+  final PublishSubject<Media> _mediaDetailController = PublishSubject<Media>();
+  final PublishSubject<Media> _similarListController = PublishSubject<Media>();
+  final PublishSubject<Media> _saveCollectController = PublishSubject<Media>();
   final PublishSubject<int> _getCollectController = PublishSubject<int>();
+  final PublishSubject<dynamic> _getCollectionMediaListController =
+      PublishSubject<dynamic>();
   final BehaviorSubject<MediaListState> _mediaListSubject =
       BehaviorSubject<MediaListState>();
   final BehaviorSubject<List<Cast>> _castListSubject =
       BehaviorSubject<List<Cast>>();
+  final BehaviorSubject<MediaListState> _collectMediaListSubject =
+      BehaviorSubject<MediaListState>();
 
   final BehaviorSubject<MediaDetail> _mediaDetailSubject =
       BehaviorSubject<MediaDetail>();
@@ -35,9 +46,14 @@ class MediaBloc {
 
   final MediaListState mediaListState = MediaListState();
 
+  final MediaListState collectionMediaListState = MediaListState();
+
   MediaCategory mediaCategory = MediaCategory.popular;
 
   Stream<MediaListState> get mediaList => _mediaListSubject.stream;
+
+  Stream<MediaListState> get collectMediaList =>
+      _collectMediaListSubject.stream;
 
   Stream<MediaDetail> get mediaDetail => _mediaDetailSubject.stream;
 
@@ -49,15 +65,15 @@ class MediaBloc {
 
   Sink<int> get page => _pageController.sink;
 
-  Sink<int> get castListFromId => _castController.sink;
+  Sink<Media> get castListFromId => _castController.sink;
 
-  Sink<int> get mediaDetailFromId => _mediaDetailController.sink;
+  Sink<Media> get mediaDetailFromMedia => _mediaDetailController.sink;
 
-  Sink<int> get similarListFromId => _similarListController.sink;
+  Sink<Media> get similarListFromId => _similarListController.sink;
 
-  Sink<int> get saveCollect => _saveCollectController.sink;
+  Sink<Media> get saveCollect => _saveCollectController.sink;
 
-  Sink<int> get getCollect => _getCollectController.sink;
+  Sink<dynamic> get getCollect => _getCollectController.sink;
 
   MediaBloc() {
     _pageController.stream.listen(getMediaList);
@@ -66,44 +82,48 @@ class MediaBloc {
     _similarListController.stream.listen(_getSimilarList);
     _saveCollectController.stream.listen(_saveCollect);
     _getCollectController.stream.listen(_getCollect);
+    _getCollectionMediaListController.stream.listen(getCollectionMediaList);
+  }
+
+  void _saveCollect(Media media) async {
+    logger.fine('_saveCollect--media--${media.toString()}');
+    await initMediaBean();
+    media.genreIdsJson = JsonEncoder().convert(media.genreIds);
+    Media tmp = await _mediaBean.find(media.id);
+    int count = 0;
+    if (tmp == null) {
+      logger.fine('insert');
+      count = await _mediaBean.insert(media);
+      if (count > 0) {
+        _collectSubject.add(true);
+      }
+    } else {
+      logger.fine('remove');
+      count = await _mediaBean.remove(media.id);
+      if (count > 0) {
+        _collectSubject.add(false);
+      }
+    }
+    _adapter.close();
   }
 
   void _getCollect(int id) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String jsonText = await prefs.get(COLLECT_LIST_KEY);
-    List<dynamic> list;
-    if (jsonText != null) {
-      list = JsonDecoder().convert(jsonText);
-      _collectSubject.add(list.contains(id));
-    } else {
-      _collectSubject.add(false);
-    }
+    await initMediaBean();
+    Media media = await _mediaBean.find(id);
+    _collectSubject.add(media != null);
+    _adapter.close();
   }
 
-  void _saveCollect(int id) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String jsonText = await prefs.get(COLLECT_LIST_KEY);
-    List<dynamic> list;
-    if (jsonText == null) {
-      list = List();
-    } else {
-      list = JsonDecoder().convert(jsonText);
-    }
-    if (!list.contains(id)) {
-      list.add(id);
-    } else {
-      list.remove(id);
-    }
-
-    bool isSuccess =
-        await prefs.setString(COLLECT_LIST_KEY, JsonEncoder().convert(list));
-    if (isSuccess) {
-      _collectSubject.add(list.contains(id));
-    }
+  Future initMediaBean() async {
+    logger.fine('initMediaBean');
+    _adapter = await SqfliteUtil().getAdapter();
+    _mediaBean = MediaBean(_adapter);
+    _mediaBean.initTable();
   }
 
-  void _getCredits(int id) async {
-    List<Cast> cast = await ApiClient().getCredits(id: id);
+  void _getCredits(Media media) async {
+    List<Cast> cast = await ApiClientUtil()
+        .getCredits(mediaType: media.mediaType, id: media.id);
     _castListSubject.add(cast.map((cast) {
       if (cast.profilePath != null) {
         cast.profilePath = PROFILE_IMAGE_URL_MEDIUM + cast.profilePath;
@@ -112,13 +132,15 @@ class MediaBloc {
     }).toList());
   }
 
-  void _getMediaDetail(int id) async {
-    MediaDetail mediaDetail = await ApiClient().getMediaDetail(id: id);
+  void _getMediaDetail(Media media) async {
+    MediaDetail mediaDetail = await ApiClientUtil()
+        .getMediaDetail(mediaType: media.mediaType, id: media.id);
     _mediaDetailSubject.add(mediaDetail);
   }
 
-  void _getSimilarList(int id) async {
-    List<Media> similarList = await ApiClient().getSimilarList(id: id);
+  void _getSimilarList(Media media) async {
+    List<Media> similarList = await ApiClientUtil()
+        .getSimilarList(mediaType: media.mediaType, id: media.id);
     _similarListSubject.add(similarList.map((media) {
       if (media.posterPath != null) {
         media.posterPath = IMAGE_URL_MEDIUM + media.posterPath;
@@ -132,7 +154,7 @@ class MediaBloc {
 
   void getMediaList([int len = 0]) async {
     if (len >= 0) {
-      MediaListRes res = await ApiClient()
+      MediaListRes res = await ApiClientUtil()
           .getMovieList(mediaCategory: mediaCategory, len: len);
       List<Media> list = res.results.map((media) {
         if (media.backdropPath != null) {
@@ -156,28 +178,55 @@ class MediaBloc {
     _mediaListSubject.add(mediaListState);
   }
 
+  void getCollectionMediaList([_]) async {
+    SqfliteUtil sqfliteUtil = SqfliteUtil();
+    SqfliteAdapter adapter = await sqfliteUtil.getAdapter();
+    MediaBean mediaBean = MediaBean(adapter);
+    List<Media> list = await mediaBean.queryAll();
+    list = list.map((media) {
+      List<dynamic> genreIds = media.genreIdsJson != null
+          ? JsonDecoder().convert(media.genreIdsJson).toList()
+          : [];
+//      logger.fine('genreIds--${genreIds.map((genreId) => int.parse(genreId.toString())).toList()}');
+      return media
+        ..genreIds =
+            genreIds.map((genreId) => int.parse(genreId.toString())).toList();
+    }).toList();
+
+    collectionMediaListState..list = list;
+    logger.fine(
+        'getCollectionMediaList--collectionMediaListState..list--${collectionMediaListState.list.toString()}');
+    _collectMediaListSubject.add(collectionMediaListState);
+  }
+
   void getMediaListAction({int len: 0}) {
     this.page.add(len);
   }
 
-  void getCastListAction(int id) {
-    this.castListFromId.add(id);
+  void getCastListAction(Media media) {
+    this.castListFromId.add(media);
   }
 
-  void getMediaDetailAction(int id) {
-    this.mediaDetailFromId.add(id);
+  void getMediaDetailAction(Media media) {
+    logger.fine('getMediaDetailAction--media--${media.toString()}');
+    this.mediaDetailFromMedia.add(media);
   }
 
-  void getSimilarListAction(int id) {
-    this.similarListFromId.add(id);
+  void getSimilarListAction(Media media) {
+    this.similarListFromId.add(media);
   }
 
   void getCollectAction(int id) {
     this.getCollect.add(id);
   }
 
-  void saveCollectAction(int id) {
-    this.saveCollect.add(id);
+  void saveCollectAction(Media media) {
+    logger.fine('saveCollectAction--media--${media.toString()}');
+    this.saveCollect.add(media);
+  }
+
+  void getCollectionMediaListAction() {
+    this._getCollectionMediaListController.add(Null);
   }
 }
 

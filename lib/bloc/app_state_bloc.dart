@@ -6,7 +6,7 @@ import 'package:cinematic_flutter/model/app_state.dart';
 import 'package:cinematic_flutter/model/app_theme.dart';
 import 'package:cinematic_flutter/model/genre.dart';
 import 'package:cinematic_flutter/model/media_type.dart';
-import 'package:cinematic_flutter/util/api_client.dart';
+import 'package:cinematic_flutter/util/api_client_util.dart';
 import 'package:logging/logging.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
@@ -96,7 +96,7 @@ class AppStateBloc {
 
   Future<AppState> getGenreAction(AppState appState) async {
     if (enGenreMap.length <= 0) {
-      List<Genre> enMovieGenreListRes = await ApiClient().getGenreList(
+      List<Genre> enMovieGenreListRes = await ApiClientUtil().getGenreList(
           mediaType: MediaType.movie,
           language: AppLocalizations.EN_LOCALE.language);
 
@@ -104,7 +104,7 @@ class AppStateBloc {
         enGenreMap[item.id] = item.name;
       });
 
-      List<Genre> enTvGenreListRes = await ApiClient().getGenreList(
+      List<Genre> enTvGenreListRes = await ApiClientUtil().getGenreList(
           mediaType: MediaType.tv,
           language: AppLocalizations.EN_LOCALE.language);
 
@@ -113,7 +113,7 @@ class AppStateBloc {
       });
     }
     if (cnGenreMap.length <= 0) {
-      List<Genre> cnMovieGenreListRes = await ApiClient().getGenreList(
+      List<Genre> cnMovieGenreListRes = await ApiClientUtil().getGenreList(
           mediaType: MediaType.movie,
           language: AppLocalizations.ZH_LOCALE.language);
 
@@ -121,7 +121,7 @@ class AppStateBloc {
         cnGenreMap[item.id] = item.name;
       });
 
-      List<Genre> cnTvGenreListRes = await ApiClient().getGenreList(
+      List<Genre> cnTvGenreListRes = await ApiClientUtil().getGenreList(
           mediaType: MediaType.tv,
           language: AppLocalizations.ZH_LOCALE.language);
 

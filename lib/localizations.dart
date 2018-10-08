@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:cinematic_flutter/util/api_client.dart';
+import 'package:cinematic_flutter/util/api_client_util.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/widgets.dart';
 import 'package:cinematic_flutter/l10n/messages_all.dart';
@@ -22,9 +22,9 @@ class AppLocalizations {
       final String localeName = Intl.canonicalizedLocale(name);
       logger.fine('locale.languageCode--${locale.languageCode}');
       if (locale.languageCode.contains(EN)) {
-        ApiClient().language = EN;
+        ApiClientUtil().language = EN;
       } else {
-        ApiClient().language = ZH;
+        ApiClientUtil().language = ZH;
       }
 
       return initializeMessages(localeName).then((bool _) {

@@ -28,6 +28,8 @@ MediaDetail _$MediaDetailFromJson(Map<String, dynamic> json) {
     ..firstAirDate = json['first_air_date'] == null
         ? null
         : toDateTime(json['first_air_date'] as String)
+    ..genreIdsJson = json['genreIdsJson'] as String
+    ..mediaType = json['mediaType'] as String
     ..belongsToCollection = json['belongs_to_collection'] == null
         ? null
         : BelongsToCollection.fromJson(
@@ -89,6 +91,8 @@ Map<String, dynamic> _$MediaDetailToJson(MediaDetail instance) =>
       'overview': instance.overview,
       'release_date': instance.releaseDate?.toIso8601String(),
       'first_air_date': instance.firstAirDate?.toIso8601String(),
+      'genreIdsJson': instance.genreIdsJson,
+      'mediaType': instance.mediaType,
       'belongs_to_collection': instance.belongsToCollection,
       'budget': instance.budget,
       'genres': instance.genres,

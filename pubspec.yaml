@@ -28,6 +28,9 @@ dependencies:
   intl_translation: ^0.17.0
   logging: ^0.11.3+2
   rxdart: ^0.18.1
+  sqflite: any
+  jaguar_orm: ^2.2.5
+  jaguar_query_sqflite: ^2.2.2
 
 
 dev_dependencies:
@@ -35,6 +38,7 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^0.10.1+1
   json_serializable: ^1.1.0
+  jaguar_orm_gen: ^2.2.10
 
 
 # For information on the generic Dart part of this file, see the
