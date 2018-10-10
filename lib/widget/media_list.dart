@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:cinematic_flutter/model/media.dart';
+import 'package:cinematic_flutter/model/media_list_type.dart';
 import 'package:cinematic_flutter/provider/media_provider.dart';
 import 'package:cinematic_flutter/widget/media_list_item.dart';
 import 'package:flutter/material.dart';
@@ -12,19 +15,27 @@ class MediaList extends StatelessWidget {
   MediaBloc _mediaBloc;
   int _len = 0;
   bool _isEnd = false;
-  bool _isCollection = false;
+  MediaListType _mediaListType;
 
   Widget buildMediaList(BuildContext ctx, List<Media> list) {
     _mediaBloc = MediaProvider.of(ctx);
     _len = list.length;
     return RefreshIndicator(
-      onRefresh: () async => _isCollection
-          ? _mediaBloc.getCollectionMediaList()
-          : _mediaBloc.getMediaList(),
+      onRefresh: () async {
+        if (this._mediaListType == MediaListType.collection) {
+          return _mediaBloc.getCollectionMediaList();
+        } else if (this._mediaListType == MediaListType.search) {
+          return _mediaBloc.getMediaSearch();
+        }
+        return _mediaBloc.getMediaList();
+      },
       child: ListView.builder(
         controller: _scrollController,
-        itemCount:
-            _len <= 0 && !_isEnd ? 0 : this._isCollection ? _len : _len + 1,
+        itemCount: _len <= 0
+            ? 0
+            : this._mediaListType == MediaListType.collection
+                ? _len
+                : _isEnd ? _len : _len + 1,
         itemBuilder: (ctx, index) {
           if (index >= _len) {
             return _buildProgressIndicator();
@@ -35,30 +46,48 @@ class MediaList extends StatelessWidget {
     );
   }
 
-  MediaList({bool isCollection: false}) {
-    this._isCollection = isCollection;
+  MediaList({MediaListType mediaListType: MediaListType.list}) {
+    this._mediaListType = mediaListType;
     _scrollController.addListener(() {
       if (_mediaBloc != null &&
-          !this._isCollection &&
+          this._mediaListType != MediaListType.collection &&
           _scrollController.position.pixels ==
               _scrollController.position.maxScrollExtent &&
           !_isEnd) {
-        _mediaBloc.getMediaListAction(len: _len);
+        if (this._mediaListType == MediaListType.list) {
+          _mediaBloc.getMediaListAction(len: _len);
+        } else if (this._mediaListType == MediaListType.search) {
+          _mediaBloc.mediaSearchAction(len: _len);
+        }
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final mediaBloc = MediaProvider.of(context);
+    if (_mediaBloc == null) {
+      _mediaBloc = MediaProvider.of(context);
+    }
+    Stream<MediaListState> stream = _mediaBloc.mediaList;
+    MediaListState mediaListState = MediaListState();
+    if (this._mediaListType == MediaListType.collection) {
+      stream = _mediaBloc.collectMediaList;
+    } else if (this._mediaListType == MediaListType.search) {
+      stream = _mediaBloc.mediaSearchList;
+      mediaListState.list = [];
+    }
     return StreamBuilder<MediaListState>(
-        stream:
-            _isCollection ? mediaBloc.collectMediaList : mediaBloc.mediaList,
-        initialData: MediaListState(),
+        stream: stream,
+        initialData: mediaListState,
         builder: (BuildContext ctx, AsyncSnapshot<MediaListState> snapshot) {
           List<Media> list = snapshot.data.list;
-          if (list != null && list.length <= 0) {
-            _isEnd = true;
+          if (list != null) {
+            if (list.length <= 0 || list.length == _len) {
+              logger.fine('MediaList--list.length--${list.length}');
+              _isEnd = true;
+            } else {
+              _isEnd = false;
+            }
           }
           return snapshot.data.list == null
               ? Center(

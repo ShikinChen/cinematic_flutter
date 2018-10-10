@@ -49,11 +49,11 @@ class ApiClientUtil {
       _singleton.logger.fine('error--${e.message}');
       return e;
     };
-    _singleton._dio.onHttpClientCreate = (HttpClient client) {
-      client.findProxy = (uri) {
-        return "PROXY 10.48.78.152:8888";
-      };
-    };
+//    _singleton._dio.onHttpClientCreate = (HttpClient client) {
+//      client.findProxy = (uri) {
+//        return "PROXY 10.48.78.152:8888";
+//      };
+//    };
     return _singleton;
   }
 
@@ -142,6 +142,22 @@ class ApiClientUtil {
         return SimilarRes.fromJson(res.data).results;
       } else {
         return List();
+      }
+    });
+  }
+
+  Future<MediaListRes> getMediaSearch({@required String query, int len = 1}) {
+    return _dio.get(
+      "/search/multi",
+      data: {
+        'page': getPage(len),
+        'query': query,
+      },
+    ).then((res) {
+      if (res.statusCode == 200) {
+        return MediaListRes.fromJson(res.data);
+      } else {
+        return MediaListRes();
       }
     });
   }

@@ -32,7 +32,9 @@ class HomePage extends StatelessWidget {
                 Icons.search,
                 color: Colors.white,
               ),
-              onPressed: () {},
+              onPressed: () {
+                goToSearchPage(ctx);
+              },
             )
           ],
         ),
@@ -125,6 +127,7 @@ class HomePage extends StatelessWidget {
           case SEARCH_KEY:
             {
               Navigator.pop(ctx);
+              goToSearchPage(ctx);
             }
             break;
           case FAVORITES_KEY:

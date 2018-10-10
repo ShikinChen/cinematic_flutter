@@ -49,7 +49,7 @@ Map<int, String> _genreMap(BuildContext ctx) {
 }
 
 List<String> getGenresForIds(List<int> genreIds, BuildContext ctx) =>
-    genreIds.map((id) => _genreMap(ctx)[id]).toList();
+    genreIds == null ? [] : genreIds.map((id) => _genreMap(ctx)[id]).toList();
 
 String getGenreString(List<int> genreIds, BuildContext ctx) {
   StringBuffer buffer = StringBuffer();

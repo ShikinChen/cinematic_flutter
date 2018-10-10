@@ -13,7 +13,6 @@ import 'package:cinematic_flutter/util/sqflite_util.dart';
 import 'package:jaguar_query_sqflite/jaguar_query_sqflite.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:logging/logging.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MediaBloc {
   final Logger logger = Logger('MediaBloc');
@@ -21,6 +20,9 @@ class MediaBloc {
   SqfliteAdapter _adapter;
   MediaBean _mediaBean;
 
+  String _keyword;
+
+//PublishSubject
   final PublishSubject<int> _pageController = PublishSubject<int>();
   final PublishSubject<Media> _castController = PublishSubject<Media>();
   final PublishSubject<Media> _mediaDetailController = PublishSubject<Media>();
@@ -29,27 +31,33 @@ class MediaBloc {
   final PublishSubject<int> _getCollectController = PublishSubject<int>();
   final PublishSubject<dynamic> _getCollectionMediaListController =
       PublishSubject<dynamic>();
+  final PublishSubject<Map<String, dynamic>> _mediaSearchController =
+      PublishSubject<Map<String, dynamic>>();
+
+//BehaviorSubject
   final BehaviorSubject<MediaListState> _mediaListSubject =
       BehaviorSubject<MediaListState>();
   final BehaviorSubject<List<Cast>> _castListSubject =
       BehaviorSubject<List<Cast>>();
   final BehaviorSubject<MediaListState> _collectMediaListSubject =
       BehaviorSubject<MediaListState>();
-
   final BehaviorSubject<MediaDetail> _mediaDetailSubject =
       BehaviorSubject<MediaDetail>();
-
   final BehaviorSubject<List<Media>> _similarListSubject =
       BehaviorSubject<List<Media>>();
-
   final BehaviorSubject<bool> _collectSubject = BehaviorSubject<bool>();
+  final BehaviorSubject<MediaListState> _mediaSearchListSubject =
+      BehaviorSubject<MediaListState>();
 
   final MediaListState mediaListState = MediaListState();
 
   final MediaListState collectionMediaListState = MediaListState();
 
+  final MediaListState searchMediaListState = MediaListState();
+
   MediaCategory mediaCategory = MediaCategory.popular;
 
+//Stream
   Stream<MediaListState> get mediaList => _mediaListSubject.stream;
 
   Stream<MediaListState> get collectMediaList =>
@@ -63,6 +71,9 @@ class MediaBloc {
 
   Stream<bool> get collect => _collectSubject.stream;
 
+  Stream<MediaListState> get mediaSearchList => _mediaSearchListSubject.stream;
+
+//Sink
   Sink<int> get page => _pageController.sink;
 
   Sink<Media> get castListFromId => _castController.sink;
@@ -75,6 +86,8 @@ class MediaBloc {
 
   Sink<dynamic> get getCollect => _getCollectController.sink;
 
+  Sink<Map<String, dynamic>> get mediaSearch => _mediaSearchController.sink;
+
   MediaBloc() {
     _pageController.stream.listen(getMediaList);
     _castController.stream.listen(_getCredits);
@@ -83,6 +96,43 @@ class MediaBloc {
     _saveCollectController.stream.listen(_saveCollect);
     _getCollectController.stream.listen(_getCollect);
     _getCollectionMediaListController.stream.listen(getCollectionMediaList);
+    _mediaSearchController.stream
+        .distinct()
+        .debounce(const Duration(milliseconds: 250))
+        .listen(getMediaSearch);
+  }
+
+  void getMediaSearch([Map<String, dynamic> params]) async {
+    String keyword;
+    int len = 0;
+    if (params != null) {
+      keyword = params['keyword'];
+      len = params['len'];
+    }
+    if (searchMediaListState.list == null) {
+      searchMediaListState.list = [];
+    }
+    if (keyword == null) {
+      searchMediaListState.list.clear();
+    } else {
+      MediaListRes res =
+          await ApiClientUtil().getMediaSearch(query: keyword, len: len);
+      List<Media> list = res.results.map((media) {
+        if (media.backdropPath != null) {
+          media.backdropPath = IMAGE_URL_LARGE + media.backdropPath;
+        }
+        if (media.posterPath != null) {
+          media.posterPath = IMAGE_URL_MEDIUM + media.posterPath;
+        }
+        return media;
+      }).toList();
+      if (len <= 0) {
+        searchMediaListState.list = list;
+      } else {
+        searchMediaListState.list.addAll(list);
+      }
+    }
+    _mediaSearchListSubject.add(searchMediaListState);
   }
 
   void _saveCollect(Media media) async {
@@ -227,6 +277,18 @@ class MediaBloc {
 
   void getCollectionMediaListAction() {
     this._getCollectionMediaListController.add(Null);
+  }
+
+  void mediaSearchAction({String keyword, int len: 0}) {
+    logger.fine('mediaSearchAction');
+    if (len == 0) {
+      _keyword = keyword;
+    }
+    Map<String, dynamic> params = {
+      'keyword': _keyword,
+      'len': len,
+    };
+    this._mediaSearchController.add(params);
   }
 }
 
